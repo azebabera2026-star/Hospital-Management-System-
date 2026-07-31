@@ -1,0 +1,23 @@
+# Environment — NEVER commit
+.env
+
+# Composer
+vendor/
+composer.lock
+
+# IDE / OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Uploads / user-generated content
+uploads/
+
+# Logs
+*.log
+
+# Rate-limit temp files (created at runtime)
+hms_rate_limits/

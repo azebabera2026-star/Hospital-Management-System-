@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Syntax & Security Checks ────────────────────────────────────────────────
+  lint:
+    name: PHP Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: php-cs-fixer
+
+      - name: PHP syntax check (all .php files)
+        run: find . -name "*.php" -not -path "./vendor/*" | xargs -P4 -I{} php -l {}
+
+      - name: Check for hardcoded credentials
+        run: |
+          ! grep -rn "DB_PASS.*=.*'" --include="*.php" . | grep -v ".env" | grep -v "config.php" | grep -v "getenv"
+
+  # ── Docker Build Smoke Test ──────────────────────────────────────────────────
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t hms:ci .
+
+      - name: Verify image exists
+        run: docker image inspect hms:ci
+
+  # ── Deploy to Production (main branch only) ──────────────────────────────────
+  deploy:
+    name: Deploy (main only)
+    runs-on: ubuntu-latest
+    needs: docker-build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASS }}
+
+      - name: Build and push production image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.REGISTRY_URL }}/hms:latest
+            ${{ secrets.REGISTRY_URL }}/hms:${{ github.sha }}
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
+          script: |
+            cd /opt/hms
+            docker compose pull
+            docker compose up -d --remove-orphans
+            docker image prune -f

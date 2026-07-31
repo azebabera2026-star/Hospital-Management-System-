@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  # ── MySQL Database ─────────────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: hms_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${HMS_DB_NAME:-hospital_management}
+      MYSQL_USER: ${HMS_DB_USER:-hms_user}
+      MYSQL_PASSWORD: ${HMS_DB_PASS:-changeme}
+      MYSQL_ROOT_PASSWORD: ${HMS_DB_ROOT_PASS:-root_changeme}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hms_net
+
+  # ── PHP-FPM + Nginx App ────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hms_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      HMS_ENV: ${HMS_ENV:-production}
+      HMS_BASE_URL: ${HMS_BASE_URL:-/}
+      HMS_DB_HOST: db
+      HMS_DB_NAME: ${HMS_DB_NAME:-hospital_management}
+      HMS_DB_USER: ${HMS_DB_USER:-hms_user}
+      HMS_DB_PASS: ${HMS_DB_PASS:-changeme}
+    ports:
+      - "${HMS_PORT:-8080}:80"
+    volumes:
+      # Mount uploads directory for persistence (optional)
+      - uploads:/var/www/html/uploads
+    networks:
+      - hms_net
+
+volumes:
+  db_data:
+  uploads:
+
+networks:
+  hms_net:
+    driver: bridge

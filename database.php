@@ -25,30 +25,52 @@ function find_user_by_username_or_email(string $identifier): ?array
 	return $user ?: null;
 }
 
-function create_user(string $username, string $email, string $password, string $role = ROLE_STAFF, ?int $linkedDoctorId = null): int
-{
+function create_user(
+	string $username,
+	string $email,
+	string $password,
+	string $role = ROLE_STAFF,
+	?int $linkedDoctorId = null,
+	bool $mustChangePassword = false
+): int {
+	$err = validate_strong_password($password);
+	if ($err !== null) {
+		throw new InvalidArgumentException($err);
+	}
 	$hash = password_hash($password, PASSWORD_BCRYPT);
-	$stmt = db()->prepare('INSERT INTO users (username,email,password_hash,role,linked_doctor_id) VALUES (?,?,?,?,?)');
-	$stmt->execute([$username, $email, $hash, $role, $linkedDoctorId]);
-	return (int) db()->lastInsertId();
+	$stmt = db()->prepare(
+		'INSERT INTO users (username, email, password_hash, role, linked_doctor_id, must_change_password)
+		 VALUES (?, ?, ?, ?, ?, ?)'
+	);
+	$stmt->execute([$username, $email, $hash, $role, $linkedDoctorId, $mustChangePassword ? 1 : 0]);
+	$newId = (int)db()->lastInsertId();
+	audit_log('user.create', 'user', $newId, ['username' => $username, 'role' => $role]);
+	return $newId;
+}
+
+function user_change_password(int $userId, string $newPassword, bool $clearMustChange = true): void
+{
+	$err = validate_strong_password($newPassword);
+	if ($err !== null) {
+		throw new InvalidArgumentException($err);
+	}
+	$hash = password_hash($newPassword, PASSWORD_BCRYPT);
+	$sql  = 'UPDATE users SET password_hash = ?' . ($clearMustChange ? ', must_change_password = 0' : '') . ' WHERE id = ?';
+	db()->prepare($sql)->execute([$hash, $userId]);
+	audit_log('user.change_password', 'user', $userId, ['must_change_cleared' => $clearMustChange]);
 }
 
 function simple_stats(): array
 {
-	$pdo = db();
+	$pdo    = db();
 	$counts = [];
-	foreach (
-		[
-			'patients',
-			'doctors',
-			'appointments',
-			'treatments',
-			'rooms',
-			'admissions'
-		] as $table
-	) {
-		$counts[$table] = (int) $pdo->query("SELECT COUNT(*) FROM $table")->fetchColumn();
-	}
+	// Soft-deleted rows are excluded where the column exists
+	$counts['patients']     = (int)$pdo->query("SELECT COUNT(*) FROM patients    WHERE deleted_at IS NULL")->fetchColumn();
+	$counts['doctors']      = (int)$pdo->query("SELECT COUNT(*) FROM doctors     WHERE deleted_at IS NULL")->fetchColumn();
+	$counts['appointments'] = (int)$pdo->query("SELECT COUNT(*) FROM appointments WHERE deleted_at IS NULL")->fetchColumn();
+	$counts['treatments']   = (int)$pdo->query("SELECT COUNT(*) FROM treatments")->fetchColumn();
+	$counts['rooms']        = (int)$pdo->query("SELECT COUNT(*) FROM rooms")->fetchColumn();
+	$counts['admissions']   = (int)$pdo->query("SELECT COUNT(*) FROM admissions")->fetchColumn();
 	return $counts;
 }
 
@@ -1062,6 +1084,10 @@ function users_update(int $id, array $data): void
 		$fields['linked_doctor_id'],
 	];
 	if (!empty($data['password'])) {
+		$passErr = validate_strong_password((string)$data['password']);
+		if ($passErr !== null) {
+			throw new InvalidArgumentException($passErr);
+		}
 		$sql .= ', password_hash = ?';
 		$params[] = password_hash((string)$data['password'], PASSWORD_BCRYPT);
 	}
@@ -1069,4 +1095,97 @@ function users_update(int $id, array $data): void
 	$params[] = $id;
 	$stmt = db()->prepare($sql);
 	$stmt->execute($params);
+	audit_log('user.update', 'user', $id, ['username' => $fields['username']]);
+}
+
+// ── Alias for modules that use get_db() instead of db() ─────────────────────
+function get_db(): PDO
+{
+	return db();
+}
+
+// ── Appointment conflict detection ───────────────────────────────────────────
+/**
+ * Returns true if the given doctor already has a non-cancelled, non-deleted
+ * appointment that overlaps with the proposed time slot (±30 minutes buffer).
+ *
+ * @param int    $doctorId      Doctor to check
+ * @param string $datetime      Proposed appointment datetime (MySQL format)
+ * @param int    $bufferMinutes Overlap buffer in minutes (default: 30)
+ * @param int|null $excludeId   Appointment ID to exclude (for edits)
+ */
+function appointment_has_conflict(
+	int $doctorId,
+	string $datetime,
+	int $bufferMinutes = 30,
+	?int $excludeId = null
+): bool {
+	$excludeSql = $excludeId ? "AND id != ?" : "";
+	$sql = "SELECT COUNT(*) FROM appointments
+	        WHERE doctor_id = ?
+	          AND status != 'cancelled'
+	          AND deleted_at IS NULL
+	          AND ABS(TIMESTAMPDIFF(MINUTE, appointment_date, ?)) < ?
+	          $excludeSql";
+	$args = [$doctorId, $datetime, $bufferMinutes];
+	if ($excludeId) $args[] = $excludeId;
+	return (int)db()->prepare($sql)->execute($args)
+		? (int)db()->prepare($sql)->execute($args)
+		: false;
+}
+
+/**
+ * Better version using a single prepared statement properly.
+ */
+function check_appointment_conflict(
+	int $doctorId,
+	string $datetime,
+	int $bufferMinutes = 30,
+	?int $excludeId = null
+): bool {
+	$excludeSql = $excludeId ? "AND id != :exclude_id" : "";
+	$sql = "SELECT COUNT(*) FROM appointments
+	        WHERE doctor_id = :doctor_id
+	          AND status != 'cancelled'
+	          AND deleted_at IS NULL
+	          AND ABS(TIMESTAMPDIFF(MINUTE, appointment_date, :appt_date)) < :buffer
+	          $excludeSql";
+	$stmt = db()->prepare($sql);
+	$stmt->bindValue(':doctor_id', $doctorId, PDO::PARAM_INT);
+	$stmt->bindValue(':appt_date', $datetime);
+	$stmt->bindValue(':buffer',    $bufferMinutes, PDO::PARAM_INT);
+	if ($excludeId) {
+		$stmt->bindValue(':exclude_id', $excludeId, PDO::PARAM_INT);
+	}
+	$stmt->execute();
+	return (int)$stmt->fetchColumn() > 0;
+}
+
+// ── Audit log writer ─────────────────────────────────────────────────────────
+/**
+ * Write a record to the audit_logs table.
+ *
+ * @param string   $action      e.g. 'patient.create', 'appointment.delete'
+ * @param string   $entityType  e.g. 'patient', 'appointment'
+ * @param int|null $entityId    Primary key of the affected record
+ * @param mixed    $detail      Any serialisable context (array, string, etc.)
+ */
+function audit_log(
+	string $action,
+	string $entityType = '',
+	?int $entityId = null,
+	mixed $detail = null
+): void {
+	try {
+		$userId = current_user()['id'] ?? null;
+		$ip     = $_SERVER['REMOTE_ADDR'] ?? null;
+		$detailJson = $detail !== null ? json_encode($detail, JSON_UNESCAPED_UNICODE) : null;
+
+		db()->prepare(
+			"INSERT INTO audit_logs (user_id, action, entity_type, entity_id, detail, ip_address)
+			 VALUES (?, ?, ?, ?, ?, ?)"
+		)->execute([$userId, $action, $entityType ?: null, $entityId, $detailJson, $ip]);
+	} catch (Throwable) {
+		// Never let audit logging crash the application
+	}
 }

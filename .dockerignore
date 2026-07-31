@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.env.*
+*.md
+*.pdf
+*.png
+docker-compose*.yml
+docker/
+uploads/
+*.log

@@ -48,6 +48,7 @@ $activeCls = 'bg-slate-100 text-slate-900 font-medium';
                     <a class="<?= $linkBase ?> <?= $current === 'manage-medications.php' ? $activeCls : '' ?>" href="manage-medications.php">Medications</a>
                     <a class="<?= $linkBase ?> <?= $current === 'manage-departments.php' ? $activeCls : '' ?>" href="manage-departments.php">Departments</a>
                     <a class="<?= $linkBase ?> <?= $current === 'manage-rooms.php' ? $activeCls : '' ?>" href="manage-rooms.php">Rooms & Admissions</a>
+                    <a class="<?= $linkBase ?> <?= $current === 'manage-billing.php' ? $activeCls : '' ?>" href="manage-billing.php">Billing & Invoices</a>
                     <a class="<?= $linkBase ?> <?= $current === 'manage-users.php' ? $activeCls : '' ?>" href="manage-users.php">Users</a>
                 <?php elseif ($role === ROLE_DOCTOR): ?>
                     <div class="mt-3 text-xs uppercase tracking-wide text-slate-500 px-3">Doctor</div>
@@ -60,7 +61,11 @@ $activeCls = 'bg-slate-100 text-slate-900 font-medium';
                     <a class="<?= $linkBase ?> <?= $current === 'manage-appointments.php' ? $activeCls : '' ?>" href="manage-appointments.php">Appointments</a>
                     <a class="<?= $linkBase ?> <?= $current === 'manage-patients.php' ? $activeCls : '' ?>" href="manage-patients.php">Patients</a>
                     <a class="<?= $linkBase ?> <?= $current === 'manage-rooms.php' ? $activeCls : '' ?>" href="manage-rooms.php">Rooms & Admissions</a>
+                    <a class="<?= $linkBase ?> <?= $current === 'manage-billing.php' ? $activeCls : '' ?>" href="manage-billing.php">Billing & Invoices</a>
                 <?php endif; ?>
+
+                <div class="mt-4 text-xs uppercase tracking-wide text-slate-500 px-3">Account</div>
+                <a class="<?= $linkBase ?> <?= $current === 'change-password.php' ? $activeCls : '' ?>" href="change-password.php">🔒 Change Password</a>
 
                 <div class="mt-6 px-3">
                     <a class="inline-flex items-center rounded bg-slate-800 text-white px-3 py-2 text-xs hover:bg-slate-900" href="../auth/logout.php">Logout</a>
