@@ -3131,7 +3131,7 @@ function handleAiSend() {
 function handleAiResponse(text) {
   const normQ = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(text) : text.toLowerCase();
   
-  // Patient search match (supports case-insensitive English & Amharic name transliteration e.g. "አልማዝ ተስፋዬ" -> "Almaz Tesfaye")
+  // Patient search — case-insensitive English name matching
   const patientMatch = DB.patients.find(p => {
     const fn = p.first_name.toLowerCase();
     const ln = p.last_name.toLowerCase();
