@@ -657,6 +657,14 @@ input,select,textarea{font-family:inherit}
 .cmd-item .ci-title { font-size: 14px; font-weight: 600; color: var(--tx); }
 .cmd-item .ci-desc { font-size: 12px; color: var(--tx2); margin-top: 2px; }
 .cmd-item:hover .ci-icon, .cmd-item.selected .ci-icon { background: var(--a); color: #fff; }
+
+.pt-tab {
+  padding: 12px 18px; font-size: 13px; font-weight: 600; color: var(--tx2);
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; transition: all .2s; outline: none;
+}
+.pt-tab:hover { color: var(--tx); }
+.pt-tab.active { color: var(--a); border-bottom-color: var(--a); }
 </style>
 </head>
 <body>
@@ -988,7 +996,7 @@ input,select,textarea{font-family:inherit}
         <div class="card">
           <div class="tbl-wrap">
             <table class="tbl">
-              <thead><tr><th>#</th><th>Name</th><th>Gender</th><th>Date of Birth</th><th>Phone</th><th>Email</th><th>Address</th><th>Actions</th></tr></thead>
+              <thead><tr><th>MRN</th><th>Name</th><th>Age / Gender</th><th>Phone</th><th>Vitals Summary</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="tb-patients"></tbody>
             </table>
           </div>
@@ -1149,23 +1157,96 @@ input,select,textarea{font-family:inherit}
 </div><!-- /app -->
 
 <!-- ════ MODALS ════ -->
-<!-- Patient -->
+<!-- Patient Modal (Comprehensive Tabbed) -->
 <div class="modal-ov" id="m-patient">
-  <div class="modal">
-    <div class="modal-hdr"><div class="modal-title" id="m-patient-title">Add New Patient</div><button class="modal-close" onclick="closeModal('m-patient')">✕</button></div>
-    <div class="form-group"><label>First Name</label><input class="form-input" type="text" id="p-fn" placeholder="First name"></div>
-    <div class="form-group"><label>Last Name</label><input class="form-input" type="text" id="p-ln" placeholder="Last name"></div>
-    <div class="form-group"><label>Gender</label><select class="form-select" id="p-g"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
-    <div class="form-group"><label>Date of Birth</label><input class="form-input" type="date" id="p-dob"></div>
-    <div class="form-group"><label>Phone</label><input class="form-input" type="text" id="p-ph" placeholder="+251-911-..."></div>
-    <div class="form-group"><label>Email</label><input class="form-input" type="email" id="p-em" placeholder="patient@example.et"></div>
-    <div class="form-group"><label>Address</label><input class="form-input" type="text" id="p-addr" placeholder="Area, Ward, Addis Ababa"></div>
-    <div style="display:flex;gap:12px;margin-top:8px">
+  <div class="modal" style="width:700px;max-height:92vh;overflow-y:auto;padding:0">
+    <div style="padding:24px 28px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:10">
+      <div class="modal-title" id="m-patient-title">Add New Patient</div>
+      <button class="modal-close" onclick="closeModal('m-patient')">✕</button>
+    </div>
+
+    <!-- Tab Nav -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--bdr);padding:0 28px;background:var(--bg2);position:sticky;top:65px;z-index:9">
+      <button class="pt-tab active" id="ptab-personal" onclick="switchPatientTab('personal',this)">👤 Personal</button>
+      <button class="pt-tab" id="ptab-vitals" onclick="switchPatientTab('vitals',this)">🩺 Vitals</button>
+      <button class="pt-tab" id="ptab-clinical" onclick="switchPatientTab('clinical',this)">🏥 Clinical</button>
+      <button class="pt-tab" id="ptab-emergency" onclick="switchPatientTab('emergency',this)">🚨 Emergency</button>
+    </div>
+
+    <!-- Tab: Personal -->
+    <div id="pt-personal" class="pt-panel" style="padding:22px 28px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group" style="margin:0"><label>First Name *</label><input class="form-input" type="text" id="p-fn" placeholder="First name"></div>
+        <div class="form-group" style="margin:0"><label>Last Name *</label><input class="form-input" type="text" id="p-ln" placeholder="Last name"></div>
+        <div class="form-group" style="margin:0"><label>MRN (Auto-generated)</label><input class="form-input" type="text" id="p-mrn" placeholder="PAT-001" readonly style="opacity:.7;cursor:not-allowed"></div>
+        <div class="form-group" style="margin:0"><label>Gender</label><select class="form-select" id="p-g"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+        <div class="form-group" style="margin:0"><label>Date of Birth</label><input class="form-input" type="date" id="p-dob"></div>
+        <div class="form-group" style="margin:0"><label>Phone</label><input class="form-input" type="text" id="p-ph" placeholder="+251-911-..."></div>
+        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Address</label><input class="form-input" type="text" id="p-addr" placeholder="Area, Ward, City"></div>
+        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Status</label><select class="form-select" id="p-status"><option value="active">Active</option><option value="admitted">Admitted</option><option value="discharged">Discharged</option><option value="outpatient">Outpatient</option></select></div>
+      </div>
+    </div>
+
+    <!-- Tab: Vitals -->
+    <div id="pt-vitals" class="pt-panel" style="display:none;padding:22px 28px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group" style="margin:0"><label>Weight (kg)</label><input class="form-input" type="number" id="p-wt" placeholder="e.g. 72" step="0.1" min="0"></div>
+        <div class="form-group" style="margin:0"><label>Height (cm)</label><input class="form-input" type="number" id="p-ht" placeholder="e.g. 170" step="0.1" min="0"></div>
+        <div class="form-group" style="margin:0"><label>Blood Pressure (mmHg)</label><input class="form-input" type="text" id="p-bp" placeholder="e.g. 120/80"></div>
+        <div class="form-group" style="margin:0"><label>Temperature (°C)</label><input class="form-input" type="number" id="p-temp" placeholder="e.g. 36.7" step="0.1" min="30" max="44"></div>
+        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Heart Rate (bpm)</label><input class="form-input" type="number" id="p-hr" placeholder="e.g. 78" min="0" max="300"></div>
+      </div>
+    </div>
+
+    <!-- Tab: Clinical -->
+    <div id="pt-clinical" class="pt-panel" style="display:none;padding:22px 28px">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="form-group" style="margin:0"><label>Chief Complaint</label><input class="form-input" type="text" id="p-cc" placeholder="Primary reason for visit"></div>
+        <div class="form-group" style="margin:0"><label>Symptoms</label><textarea class="form-input" id="p-sym" rows="2" placeholder="List symptoms..." style="resize:vertical"></textarea></div>
+        <div class="form-group" style="margin:0"><label>Diagnosis</label><textarea class="form-input" id="p-diag" rows="2" placeholder="Clinical diagnosis..." style="resize:vertical"></textarea></div>
+        <div class="form-group" style="margin:0"><label>Investigations (Lab Tests)</label><textarea class="form-input" id="p-inv" rows="2" placeholder="CBC, BMP, Lipids..." style="resize:vertical"></textarea></div>
+        <div class="form-group" style="margin:0"><label>Imaging (X-Ray, MRI, CT, Echo)</label><textarea class="form-input" id="p-img" rows="2" placeholder="Imaging findings..." style="resize:vertical"></textarea></div>
+        <div class="form-group" style="margin:0"><label>Referral Details</label><input class="form-input" type="text" id="p-ref" placeholder="Referred to specialty..."></div>
+        <div class="form-group" style="margin:0"><label>Allergies</label><input class="form-input" type="text" id="p-allergy" placeholder="Drug, food, environmental allergies..."></div>
+        <div class="form-group" style="margin:0"><label>Medical History</label><textarea class="form-input" id="p-hx" rows="2" placeholder="Past conditions, surgeries, family history..." style="resize:vertical"></textarea></div>
+      </div>
+    </div>
+
+    <!-- Tab: Emergency Contact -->
+    <div id="pt-emergency" class="pt-panel" style="display:none;padding:22px 28px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Emergency Contact Name</label><input class="form-input" type="text" id="p-ec-name" placeholder="Full name &amp; relationship e.g. Abebe Kebede (Father)"></div>
+        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Emergency Contact Phone</label><input class="form-input" type="text" id="p-ec-phone" placeholder="+251-911-..."></div>
+      </div>
+      <div style="margin-top:20px;padding:16px;background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:12px">
+        <div style="font-size:13px;font-weight:600;color:var(--a4);margin-bottom:8px">🚨 Emergency Contact Information</div>
+        <div style="font-size:12px;color:var(--tx3);line-height:1.6">This information is used to notify the patient's next-of-kin in the event of a medical emergency or critical update. Please ensure it is accurate and up-to-date.</div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div style="padding:16px 28px;border-top:1px solid var(--bdr);display:flex;gap:12px;position:sticky;bottom:0;background:var(--bg2)">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('m-patient')">Cancel</button>
       <button class="btn btn-teal" style="flex:1" id="m-patient-btn" onclick="savePatient()">Add Patient</button>
     </div>
   </div>
 </div>
+
+<!-- Patient View Modal (Read-Only Profile) -->
+<div class="modal-ov" id="m-patient-view">
+  <div class="modal" style="width:720px;max-height:92vh;overflow-y:auto;padding:0">
+    <div style="padding:24px 28px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:10">
+      <div>
+        <div class="modal-title" id="m-pview-name">Patient Profile</div>
+        <div style="font-size:12px;color:var(--tx3);margin-top:3px" id="m-pview-mrn"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal('m-patient-view')">✕</button>
+    </div>
+    <div id="m-pview-body" style="padding:24px 28px"></div>
+  </div>
+</div>
+
+
 
 <!-- Doctor -->
 <div class="modal-ov" id="m-doctor">
@@ -1537,12 +1618,72 @@ const DB = {
     {id:5,name:'Orthopedics',description:'Bone and joint care'}
   ],
   patients:[
-    {id:1,first_name:'Abebe',last_name:'Kebede',gender:'male',birthdate:'1982-05-14',phone:'+251-911-123456',email:'abebe.kebede@example.et',address:'Bole Sub-City, Ward 03, Addis Ababa'},
-    {id:2,first_name:'Almaz',last_name:'Tesfaye',gender:'female',birthdate:'1994-11-02',phone:'+251-911-234567',email:'almaz.tesfaye@example.et',address:'Kazanchis, Ward 08, Addis Ababa'},
-    {id:3,first_name:'Chala',last_name:'Bekele',gender:'male',birthdate:'2016-07-20',phone:'+251-911-345678',email:'chala.bekele@example.et',address:'Sarbet, Old Airport Area, Addis Ababa'},
-    {id:4,first_name:'Tigist',last_name:'Assefa',gender:'female',birthdate:'1978-03-30',phone:'+251-911-456789',email:'tigist.assefa@example.et',address:'Piassa, Churchill Avenue, Addis Ababa'},
-    {id:5,first_name:'Solomon',last_name:'Berhanu',gender:'male',birthdate:'1970-09-12',phone:'+251-912-567890',email:'solomon.b@example.et',address:'Arat Kilo, University District, Addis Ababa'},
-    {id:6,first_name:'Hiwot',last_name:'Tadesse',gender:'female',birthdate:'1990-01-22',phone:'+251-913-678901',email:'hiwot.tadesse@example.et',address:'Bole Atlas, Ward 04, Addis Ababa'}
+    {id:1,mrn:'PAT-001',first_name:'Abebe',last_name:'Kebede',gender:'male',birthdate:'1982-05-14',phone:'+251-911-123456',address:'Bole Sub-City, Ward 03, Addis Ababa',
+     weight_kg:78,height_cm:175,blood_pressure:'145/92',temperature_c:36.8,heart_rate_bpm:82,
+     chief_complaint:'Persistent headache and dizziness for 3 weeks',
+     symptoms:'Headache, dizziness, occasional chest tightness, shortness of breath on exertion',
+     diagnosis:'Essential hypertension — Stage 2',
+     investigations:'CBC (WBC 7.2, RBC 4.8), Lipid panel (LDL 145 mg/dL, HDL 38 mg/dL), BMP (Creatinine 1.1 mg/dL, K 4.0 mEq/L)',
+     imaging:'Chest X-ray: mild cardiomegaly; Echo: LVH noted, EF 55%',
+     referral:'Referred to cardiologist for LVH management',
+     allergies:'Penicillin (rash), Sulfonamides',
+     medical_history:'Diagnosed with HTN in 2020; Father had MI at age 58; Non-smoker; Social drinker',
+     emergency_contact_name:'Tigist Kebede (Wife)',emergency_contact_phone:'+251-911-999001',status:'active'},
+    {id:2,mrn:'PAT-002',first_name:'Almaz',last_name:'Tesfaye',gender:'female',birthdate:'1994-11-02',phone:'+251-911-234567',address:'Kazanchis, Ward 08, Addis Ababa',
+     weight_kg:62,height_cm:163,blood_pressure:'118/76',temperature_c:37.1,heart_rate_bpm:74,
+     chief_complaint:'Right knee pain and swelling after a fall 2 weeks ago',
+     symptoms:'Right knee pain (7/10), swelling, limited range of motion, difficulty weight-bearing',
+     diagnosis:'Meniscal tear, right knee — medial compartment',
+     investigations:'CBC: Normal. ESR 28 mm/hr. CRP 14 mg/L. Uric acid: 4.1 mg/dL',
+     imaging:'MRI Right Knee: Posterior horn medial meniscus tear, Grade III; mild joint effusion',
+     referral:'Referred for physiotherapy; surgical consult scheduled',
+     allergies:'NSAIDs (mild GI upset)',
+     medical_history:'No previous musculoskeletal injuries; Active lifestyle, runs 5K weekly; No chronic conditions',
+     emergency_contact_name:'Bekele Tesfaye (Father)',emergency_contact_phone:'+251-911-999002',status:'admitted'},
+    {id:3,mrn:'PAT-003',first_name:'Chala',last_name:'Bekele',gender:'male',birthdate:'2016-07-20',phone:'+251-911-345678',address:'Sarbet, Old Airport Area, Addis Ababa',
+     weight_kg:22,height_cm:118,blood_pressure:'98/62',temperature_c:36.5,heart_rate_bpm:96,
+     chief_complaint:'Routine vaccination and developmental check-up',
+     symptoms:'No acute complaints; mild rhinorrhea, mild cough for 4 days',
+     diagnosis:'Well child visit — mild upper respiratory infection (viral)',
+     investigations:'Nasal swab: RSV negative; Rapid flu: negative. Full blood count: normal',
+     imaging:'None indicated',
+     referral:'No referral required; follow-up in 6 months',
+     allergies:'None known',
+     medical_history:'Birth: 38 weeks GA, no complications; up-to-date on immunizations; No hospitalizations',
+     emergency_contact_name:'Bekele Chala (Father)',emergency_contact_phone:'+251-911-999003',status:'active'},
+    {id:4,mrn:'PAT-004',first_name:'Tigist',last_name:'Assefa',gender:'female',birthdate:'1978-03-30',phone:'+251-911-456789',address:'Piassa, Churchill Avenue, Addis Ababa',
+     weight_kg:70,height_cm:160,blood_pressure:'132/84',temperature_c:36.9,heart_rate_bpm:78,
+     chief_complaint:'Recurrent headaches and visual disturbances over past 6 months',
+     symptoms:'Migraines (5-6 episodes/month), visual aura, nausea, photophobia, neck stiffness',
+     diagnosis:'Migraine with aura — under neurological evaluation',
+     investigations:'CBC: normal; TSH: 2.4 mIU/L (normal); Fasting glucose: 98 mg/dL',
+     imaging:'Brain MRI: No acute intracranial pathology; mild white matter changes',
+     referral:'Referred to neurology for migraine management protocol',
+     allergies:'Aspirin (exacerbates migraines), Codeine',
+     medical_history:'Migraines since age 25; OCP use (10 years); Occasional alcohol use; Stress-related trigger',
+     emergency_contact_name:'Assefa Girma (Husband)',emergency_contact_phone:'+251-911-999004',status:'active'},
+    {id:5,mrn:'PAT-005',first_name:'Solomon',last_name:'Berhanu',gender:'male',birthdate:'1970-09-12',phone:'+251-912-567890',address:'Arat Kilo, University District, Addis Ababa',
+     weight_kg:88,height_cm:178,blood_pressure:'158/98',temperature_c:37.0,heart_rate_bpm:88,
+     chief_complaint:'Chest pain and shortness of breath',
+     symptoms:'Central chest pressure, dyspnea on exertion, fatigue, lower limb oedema',
+     diagnosis:'Hyperlipidemia; Hypertension Stage 2; Stable angina — workup ongoing',
+     investigations:'Lipid panel: LDL 190 mg/dL, Triglycerides 280 mg/dL; Troponin: negative; ECG: ST changes',
+     imaging:'Coronary CT angiography: 40% stenosis LAD; Echo: EF 50%, diastolic dysfunction',
+     referral:'Cardiology: stress test and coronary angiography planned',
+     allergies:'Metformin (GI intolerance), Latex',
+     medical_history:'Hypertension 10 years; Family history of CAD (brother — CABG at 55); 20 pack-year smoker (quit 2020)',
+     emergency_contact_name:'Almaz Berhanu (Wife)',emergency_contact_phone:'+251-912-999005',status:'discharged'},
+    {id:6,mrn:'PAT-006',first_name:'Hiwot',last_name:'Tadesse',gender:'female',birthdate:'1990-01-22',phone:'+251-913-678901',address:'Bole Atlas, Ward 04, Addis Ababa',
+     weight_kg:58,height_cm:165,blood_pressure:'122/80',temperature_c:37.3,heart_rate_bpm:92,
+     chief_complaint:'Atypical chest pain and palpitations',
+     symptoms:'Sharp left-sided chest pain (non-exertional), palpitations, mild dyspnea, anxiety',
+     diagnosis:'Chest pain — atypical; R/O cardiac cause; Anxiety disorder suspected',
+     investigations:'ECG: sinus tachycardia; Troponin I: <0.01 (negative); D-Dimer: 0.3 μg/mL; CBC: normal',
+     imaging:'CXR: clear lung fields, no cardiomegaly; Echo: normal LV function, EF 60%, no effusion',
+     referral:'Referred to psychiatry for anxiety evaluation; Cardiology follow-up in 4 weeks',
+     allergies:'Ibuprofen (urticaria), Penicillin V',
+     medical_history:'No prior cardiac history; Anxiety diagnosed 2023; Occasional panic attacks; Non-smoker',
+     emergency_contact_name:'Tadesse Worku (Brother)',emergency_contact_phone:'+251-913-999006',status:'active'}
   ],
   doctors:[
     {id:1,first_name:'Dawit',last_name:'Solomon',email:'dawit.solomon@nucleushospital.et',phone:'+251-911-500101',specialization:'Interventional Cardiology',department_id:1},
@@ -1783,28 +1924,222 @@ function refreshDoctorDeptSelect(){
 }
 
 // ════ RENDERS ════
+function calcAge(dobStr) {
+  if (!dobStr) return '—';
+  const birth = new Date(dobStr);
+  if (isNaN(birth)) return '—';
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age >= 0 ? `${age} yrs` : '—';
+}
+
+function switchPatientTab(name, el) {
+  document.querySelectorAll('.pt-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pt-panel').forEach(p => p.style.display = 'none');
+  if (el) el.classList.add('active');
+  const panel = document.getElementById('pt-' + name);
+  if (panel) panel.style.display = 'block';
+}
+
 function renderPatients(f=''){
   const normF = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(f) : (f||'').toLowerCase();
   const rows = DB.patients.filter(p => {
     if (!normF) return true;
+    const mrn = (p.mrn || '').toLowerCase();
     const fn = p.first_name.toLowerCase();
     const ln = p.last_name.toLowerCase();
-    const target = `${fn} ${ln} ${p.email||''} ${p.phone||''} ${p.address||''}`.toLowerCase();
+    const diag = (p.diagnosis || '').toLowerCase();
+    const target = `${mrn} ${fn} ${ln} ${p.phone||''} ${p.address||''} ${diag}`.toLowerCase();
     return target.includes(normF) || normF.includes(fn) || normF.includes(ln);
   });
   document.getElementById('tb-patients').innerHTML=rows.length
-    ?rows.map(p=>`<tr>
-      <td><span style="color:var(--tx3);font-weight:600">#${p.id}</span></td>
-      <td><strong style="color:var(--tx)">${p.first_name} ${p.last_name}</strong></td>
-      <td>${sBadge(p.gender||'other')}</td>
-      <td>${fDate(p.birthdate)}</td>
-      <td style="color:var(--a)">${p.phone||'—'}</td>
-      <td>${p.email||'—'}</td>
-      <td style="max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.address||'—'}</td>
-      <td>${actBtns(`editPatient(${p.id})`,`delPatient(${p.id})`)}</td>
-    </tr>`).join('')
-    :`<tr><td colspan="8"><div class="empty"><div class="eico">🧑‍⚕️</div><p>No patients found</p></div></td></tr>`;
+    ?rows.map(p=>{
+      const ageStr = calcAge(p.birthdate);
+      const genderIco = p.gender==='male'?'👨':p.gender==='female'?'👩':'👤';
+      const vitalsSummary = p.blood_pressure ? `BP: <strong>${p.blood_pressure}</strong>${p.weight_kg ? ` · ${p.weight_kg}kg` : ''}` : '<span style="color:var(--tx3)">No vitals</span>';
+      const statusBadge = sBadge(p.status || 'active');
+      return `<tr>
+        <td><span style="color:var(--a);font-weight:700;font-family:monospace;font-size:13px">${p.mrn||'PAT-'+String(p.id).padStart(3,'0')}</span></td>
+        <td><strong style="color:var(--tx)">${p.first_name} ${p.last_name}</strong><br><span style="font-size:11px;color:var(--tx3)">${p.address||'Addis Ababa'}</span></td>
+        <td>${genderIco} ${ageStr} <span style="font-size:11px;color:var(--tx3);text-transform:capitalize">(${p.gender||'other'})</span></td>
+        <td style="color:var(--a2);white-space:nowrap">${p.phone||'—'}</td>
+        <td style="font-size:12px">${vitalsSummary}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <div style="display:flex;gap:5px">
+            <button class="btn btn-ghost btn-sm btn-ico" onclick="viewPatient(${p.id})" title="View Clinical Profile">👁️</button>
+            <button class="btn btn-ghost btn-sm btn-ico" onclick="editPatient(${p.id})" title="Edit Patient">✏️</button>
+            <button class="btn btn-danger btn-sm btn-ico" onclick="delPatient(${p.id})" title="Delete Patient">🗑</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')
+    :`<tr><td colspan="7"><div class="empty"><div class="eico">🧑‍⚕️</div><p>No patients found</p></div></td></tr>`;
   document.getElementById('nb-patients').textContent=DB.patients.length;
+}
+
+function viewPatient(id) {
+  const p = DB.patients.find(x => x.id === id);
+  if (!p) return;
+  const ageStr = calcAge(p.birthdate);
+  document.getElementById('m-pview-name').textContent = `${p.first_name} ${p.last_name}`;
+  document.getElementById('m-pview-mrn').textContent = `MRN: ${p.mrn || 'PAT-' + String(p.id).padStart(3, '0')} · ${p.gender ? p.gender.toUpperCase() : ''} · ${ageStr} (DOB: ${fDate(p.birthdate)})`;
+
+  const appts = DB.appointments.filter(a => a.patient_id === p.id);
+  const treats = DB.treatments.filter(t => t.patient_id === p.id);
+
+  document.getElementById('m-pview-body').innerHTML = `
+    <!-- Vitals Summary Banner -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px;padding:16px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:12px">
+      <div><div style="font-size:11px;color:var(--tx3)">Blood Pressure</div><div style="font-size:15px;font-weight:700;color:var(--a)">${p.blood_pressure || '—'}</div></div>
+      <div><div style="font-size:11px;color:var(--tx3)">Heart Rate</div><div style="font-size:15px;font-weight:700;color:var(--a2)">${p.heart_rate_bpm ? p.heart_rate_bpm + ' bpm' : '—'}</div></div>
+      <div><div style="font-size:11px;color:var(--tx3)">Temperature</div><div style="font-size:15px;font-weight:700;color:var(--a3)">${p.temperature_c ? p.temperature_c + ' °C' : '—'}</div></div>
+      <div><div style="font-size:11px;color:var(--tx3)">Weight &amp; Height</div><div style="font-size:14px;font-weight:600;color:var(--tx)">${p.weight_kg ? p.weight_kg + ' kg' : '—'} / ${p.height_cm ? p.height_cm + ' cm' : '—'}</div></div>
+    </div>
+
+    <!-- Clinical Details -->
+    <div style="display:flex;flex-direction:column;gap:14px;font-size:13px">
+      <div style="padding:14px;background:var(--bg3);border-radius:10px;border-left:4px solid var(--a)">
+        <strong style="color:var(--a);display:block;margin-bottom:4px">🚨 Chief Complaint</strong>
+        <div>${p.chief_complaint || 'No chief complaint recorded'}</div>
+      </div>
+
+      <div style="padding:14px;background:var(--bg3);border-radius:10px;border-left:4px solid var(--a2)">
+        <strong style="color:var(--a2);display:block;margin-bottom:4px">🩺 Symptoms &amp; Diagnosis</strong>
+        <div><strong>Symptoms:</strong> ${p.symptoms || '—'}</div>
+        <div style="margin-top:6px"><strong>Diagnosis:</strong> <span class="badge bg" style="font-size:12px">${p.diagnosis || 'Pending evaluation'}</span></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="padding:12px;background:var(--bg3);border-radius:10px">
+          <strong style="color:var(--a3);display:block;margin-bottom:4px">🧪 Investigations (Labs)</strong>
+          <div style="color:var(--tx2);font-size:12px">${p.investigations || 'None ordered'}</div>
+        </div>
+        <div style="padding:12px;background:var(--bg3);border-radius:10px">
+          <strong style="color:var(--a5);display:block;margin-bottom:4px">🖼 Imaging (X-Ray/MRI/CT)</strong>
+          <div style="color:var(--tx2);font-size:12px">${p.imaging || 'None ordered'}</div>
+        </div>
+      </div>
+
+      <div style="padding:12px;background:var(--bg3);border-radius:10px">
+        <strong style="color:var(--a4);display:block;margin-bottom:4px">⚠️ Allergies &amp; Medical History</strong>
+        <div><strong>Allergies:</strong> <span style="color:var(--a4);font-weight:600">${p.allergies || 'No known allergies'}</span></div>
+        <div style="margin-top:4px"><strong>History:</strong> ${p.medical_history || 'No significant past history'}</div>
+      </div>
+
+      <div style="padding:12px;background:var(--bg3);border-radius:10px">
+        <strong style="color:var(--tx);display:block;margin-bottom:4px">📞 Emergency Contact &amp; Referral</strong>
+        <div><strong>Contact:</strong> ${p.emergency_contact_name || '—'} (${p.emergency_contact_phone || '—'})</div>
+        <div style="margin-top:4px"><strong>Referral:</strong> ${p.referral || 'Self-referred'}</div>
+      </div>
+
+      <div style="padding:12px;background:var(--bg3);border-radius:10px">
+        <strong style="color:var(--tx);display:block;margin-bottom:6px">📅 Medical Visits (${treats.length} treatments, ${appts.length} appointments)</strong>
+        ${treats.map(t => `<div style="font-size:12px;color:var(--tx2);margin-bottom:4px">• <strong>${fDate(t.treatment_date)}</strong> — ${t.diagnosis} (Dr. ${gDoc(t.doctor_id)})</div>`).join('') || '<div style="color:var(--tx3);font-size:12px">No previous treatments recorded</div>'}
+      </div>
+    </div>
+  `;
+  openModal('m-patient-view');
+}
+
+function openAddPatient() {
+  editState.patient = null;
+  const nextMrn = 'PAT-' + String(nxt.p).padStart(3, '0');
+  document.getElementById('p-mrn').value = nextMrn;
+  document.getElementById('m-patient-title').textContent = 'Add New Patient';
+  document.getElementById('m-patient-btn').textContent = 'Add Patient';
+  ['p-fn','p-ln','p-dob','p-ph','p-addr','p-wt','p-ht','p-bp','p-temp','p-hr','p-cc','p-sym','p-diag','p-inv','p-img','p-ref','p-allergy','p-hx','p-ec-name','p-ec-phone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('p-g').value = 'male';
+  document.getElementById('p-status').value = 'active';
+  switchPatientTab('personal', document.getElementById('ptab-personal'));
+  openModal('m-patient');
+}
+
+function editPatient(id){
+  const p=DB.patients.find(x=>x.id===id);if(!p)return;
+  editState.patient=id;
+  document.getElementById('p-mrn').value = p.mrn || ('PAT-' + String(p.id).padStart(3, '0'));
+  document.getElementById('p-fn').value = p.first_name || '';
+  document.getElementById('p-ln').value = p.last_name || '';
+  document.getElementById('p-g').value = p.gender || 'male';
+  document.getElementById('p-dob').value = p.birthdate || '';
+  document.getElementById('p-ph').value = p.phone || '';
+  document.getElementById('p-addr').value = p.address || '';
+  document.getElementById('p-status').value = p.status || 'active';
+
+  document.getElementById('p-wt').value = p.weight_kg || '';
+  document.getElementById('p-ht').value = p.height_cm || '';
+  document.getElementById('p-bp').value = p.blood_pressure || '';
+  document.getElementById('p-temp').value = p.temperature_c || '';
+  document.getElementById('p-hr').value = p.heart_rate_bpm || '';
+
+  document.getElementById('p-cc').value = p.chief_complaint || '';
+  document.getElementById('p-sym').value = p.symptoms || '';
+  document.getElementById('p-diag').value = p.diagnosis || '';
+  document.getElementById('p-inv').value = p.investigations || '';
+  document.getElementById('p-img').value = p.imaging || '';
+  document.getElementById('p-ref').value = p.referral || '';
+  document.getElementById('p-allergy').value = p.allergies || '';
+  document.getElementById('p-hx').value = p.medical_history || '';
+
+  document.getElementById('p-ec-name').value = p.emergency_contact_name || '';
+  document.getElementById('p-ec-phone').value = p.emergency_contact_phone || '';
+
+  document.getElementById('m-patient-title').textContent = 'Edit Patient Record';
+  document.getElementById('m-patient-btn').textContent = 'Save Changes';
+  switchPatientTab('personal', document.getElementById('ptab-personal'));
+  openModal('m-patient');
+}
+
+function savePatient(){
+  const fn=document.getElementById('p-fn').value.trim();
+  const ln=document.getElementById('p-ln').value.trim();
+  if(!fn||!ln){showToast('First and last name are required','error');return}
+
+  const data = {
+    mrn: document.getElementById('p-mrn').value || ('PAT-' + String(nxt.p).padStart(3, '0')),
+    first_name: fn,
+    last_name: ln,
+    gender: document.getElementById('p-g').value,
+    birthdate: document.getElementById('p-dob').value || null,
+    phone: document.getElementById('p-ph').value || null,
+    address: document.getElementById('p-addr').value || null,
+    status: document.getElementById('p-status').value || 'active',
+
+    weight_kg: parseFloat(document.getElementById('p-wt').value) || null,
+    height_cm: parseFloat(document.getElementById('p-ht').value) || null,
+    blood_pressure: document.getElementById('p-bp').value.trim() || null,
+    temperature_c: parseFloat(document.getElementById('p-temp').value) || null,
+    heart_rate_bpm: parseInt(document.getElementById('p-hr').value) || null,
+
+    chief_complaint: document.getElementById('p-cc').value.trim() || null,
+    symptoms: document.getElementById('p-sym').value.trim() || null,
+    diagnosis: document.getElementById('p-diag').value.trim() || null,
+    investigations: document.getElementById('p-inv').value.trim() || null,
+    imaging: document.getElementById('p-img').value.trim() || null,
+    referral: document.getElementById('p-ref').value.trim() || null,
+    allergies: document.getElementById('p-allergy').value.trim() || null,
+    medical_history: document.getElementById('p-hx').value.trim() || null,
+
+    emergency_contact_name: document.getElementById('p-ec-name').value.trim() || null,
+    emergency_contact_phone: document.getElementById('p-ec-phone').value.trim() || null
+  };
+
+  if(editState.patient){
+    Object.assign(DB.patients.find(p=>p.id===editState.patient), data);
+    showToast(`Patient ${fn} ${ln} updated`,'success');
+    editState.patient=null;
+  } else {
+    DB.patients.push({id:nxt.p++, ...data});
+    showToast(`Patient ${fn} ${ln} added`,'success');
+  }
+  closeModal('m-patient');
+  renderPatients();populateSelects();renderDashboardStats();
 }
 
 function renderDoctors(f=''){
@@ -2135,26 +2470,7 @@ function dischargePatient(id){
   showToast(`${gPat(a.patient_id)} discharged successfully`,'success');
 }
 
-// ════ SAVE (Add / Update) ════
-function savePatient(){
-  const fn=document.getElementById('p-fn').value.trim();
-  const ln=document.getElementById('p-ln').value.trim();
-  if(!fn||!ln){showToast('First and last name are required','error');return}
-  const data={first_name:fn,last_name:ln,gender:document.getElementById('p-g').value,birthdate:document.getElementById('p-dob').value||null,phone:document.getElementById('p-ph').value||null,email:document.getElementById('p-em').value||null,address:document.getElementById('p-addr').value||null};
-  if(editState.patient){
-    Object.assign(DB.patients.find(p=>p.id===editState.patient),data);
-    showToast(`Patient ${fn} ${ln} updated`,'success');
-    editState.patient=null;
-  } else {
-    DB.patients.push({id:nxt.p++,...data});
-    showToast(`Patient ${fn} ${ln} added`,'success');
-  }
-  closeModal('m-patient');
-  document.getElementById('m-patient-title').textContent='Add New Patient';
-  document.getElementById('m-patient-btn').textContent='Add Patient';
-  ['p-fn','p-ln','p-dob','p-ph','p-em','p-addr'].forEach(id=>document.getElementById(id).value='');
-  renderPatients();populateSelects();
-}
+
 function saveDoctor(){
   const fn=document.getElementById('d-fn').value.trim();
   const ln=document.getElementById('d-ln').value.trim();
