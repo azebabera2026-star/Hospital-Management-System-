@@ -2902,15 +2902,11 @@ function autoCorrectTranscript(transcript) {
 }
 
 /**
- * Get the BCP-47 speech recognition language tag based on current UI language.
- * en-ET is the closest available code for Ethiopian-accented English on Chrome;
- * falls back to en-US when unavailable.
+ * Speech recognition language is explicitly set to en-US
+ * to guarantee all voice inputs are transcribed in English letters.
  */
 function getSpeechLang() {
-  if (typeof currentLang === 'undefined') return 'en-US';
-  if (currentLang === 'am') return 'am-ET';  // Amharic input
-  // Use en-ET to better handle Ethiopian-accented English phonemes
-  return 'en-ET';
+  return 'en-US';
 }
 
 function toggleVoiceInput() {
@@ -2933,16 +2929,16 @@ function toggleVoiceInput() {
   }
 
   speechRec = new SpeechRec();
-  speechRec.lang            = getSpeechLang();  // ← Dynamic language
+  speechRec.lang            = 'en-US';  // ← Explicitly locked to en-US
   speechRec.continuous      = false;
   speechRec.interimResults  = true;
-  speechRec.maxAlternatives = 3;  // Get top-3 alternatives for better correction
+  speechRec.maxAlternatives = 3;
 
   speechRec.onstart = () => {
     isListening = true;
     micBtn?.classList.add('listening');
-    if (input) input.placeholder = `🎤 Listening (${speechRec.lang})...`;
-    showToast(`🎤 Listening in ${speechRec.lang === 'am-ET' ? 'አማርኛ' : 'English'}...`, 'info');
+    if (input) input.placeholder = '🎤 Listening (en-US)...';
+    showToast('🎤 Listening in English (en-US)...', 'info');
   };
 
   speechRec.onresult = (e) => {
@@ -2977,18 +2973,9 @@ function toggleVoiceInput() {
       'no-speech':         '🎤 No speech detected. Please try again.',
       'audio-capture':     '🎤 Microphone not found or permission denied.',
       'not-allowed':       '🎤 Microphone access blocked. Check browser permissions.',
-      'language-not-supported': `⚠️ Language ${speechRec.lang} not supported. Falling back to en-US.`,
       'network':           '⚠️ Network error during speech recognition.',
     };
     showToast(msgs[e.error] || `⚠️ Speech error: ${e.error}`, 'error');
-
-    // Automatic fallback: if en-ET not supported, retry with en-US
-    if (e.error === 'language-not-supported' && speechRec.lang !== 'en-US') {
-      setTimeout(() => {
-        speechRec.lang = 'en-US';
-        speechRec.start();
-      }, 500);
-    }
   };
 
   speechRec.onend = () => {
