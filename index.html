@@ -766,6 +766,9 @@ input,select,textarea{font-family:inherit}
     </div>
 
     <div class="sb-sec">Clinical</div>
+    <div class="sb-item" id="nav-reception" onclick="showPage('reception',this)">
+      <span class="sico2">🪪</span> Card / Reception
+    </div>
     <div class="sb-item" id="nav-patients" onclick="showPage('patients',this)">
       <span class="sico2">🧑‍⚕️</span> Patients <span class="sb-badge" id="nb-patients">6</span>
     </div>
@@ -983,6 +986,90 @@ input,select,textarea{font-family:inherit}
             <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Pediatrics</span><span style="color:var(--tx2);font-weight:600">1 patient · 20%</span></div><div class="prog-bar"><div class="prog-fill" style="width:20%;background:linear-gradient(90deg,var(--a3),#d97706)"></div></div></div>
             <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Neurology</span><span style="color:var(--tx2);font-weight:600">0 patients · 0%</span></div><div class="prog-bar"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,var(--a5),#2563eb)"></div></div></div>
             <div><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>Emergency</span><span style="color:var(--tx2);font-weight:600">0 patients · 0%</span></div><div class="prog-bar"><div class="prog-fill" style="width:0%;background:linear-gradient(90deg,var(--a4),#e11d48)"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ██ CARD / RECEPTION DESK ██ -->
+      <div class="page" id="page-reception">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+          <!-- Card Registration & Triage Form Card -->
+          <div class="card" style="padding:22px">
+            <div class="card-hdr" style="margin-bottom:16px">
+              <div>
+                <div class="card-title">🪪 Card Registration &amp; Initial Triage Desk</div>
+                <div class="card-sub">Quick patient intake, MRN generation, vitals logging, and doctor routing</div>
+              </div>
+            </div>
+
+            <form onsubmit="submitReceptionTriage(event)">
+              <!-- Row 1: Patient Identity -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+                <div class="form-group" style="margin:0"><label>First Name *</label><input class="form-input" type="text" id="rec-fn" placeholder="First name" required></div>
+                <div class="form-group" style="margin:0"><label>Last Name *</label><input class="form-input" type="text" id="rec-ln" placeholder="Last name" required></div>
+                <div class="form-group" style="margin:0"><label>Gender</label><select class="form-select" id="rec-g"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+                <div class="form-group" style="margin:0"><label>Date of Birth</label><input class="form-input" type="date" id="rec-dob"></div>
+                <div class="form-group" style="margin:0"><label>Phone</label><input class="form-input" type="text" id="rec-ph" placeholder="+251-911-..."></div>
+                <div class="form-group" style="margin:0"><label>Address / Sub-City</label><input class="form-input" type="text" id="rec-addr" placeholder="e.g. Bole Ward 03"></div>
+              </div>
+
+              <!-- Row 2: Initial Triage Vitals -->
+              <div style="margin-top:14px;padding:14px;background:rgba(255,255,255,.02);border:1px solid var(--bdr);border-radius:10px;margin-bottom:12px">
+                <div style="font-size:12px;font-weight:700;color:var(--a);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">🩺 Initial Triage Vitals</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+                  <div class="form-group" style="margin:0"><label>Blood Pressure</label><input class="form-input" type="text" id="rec-bp" placeholder="120/80"></div>
+                  <div class="form-group" style="margin:0"><label>SpO₂ (%)</label><input class="form-input" type="number" id="rec-spo2" placeholder="98" min="0" max="100"></div>
+                  <div class="form-group" style="margin:0"><label>Temp (°C)</label><input class="form-input" type="number" id="rec-temp" placeholder="36.8" step="0.1"></div>
+                  <div class="form-group" style="margin:0"><label>Weight (kg)</label><input class="form-input" type="number" id="rec-wt" placeholder="70" step="0.1"></div>
+                  <div class="form-group" style="margin:0"><label>Height (cm)</label><input class="form-input" type="number" id="rec-ht" placeholder="170" step="0.1"></div>
+                  <div class="form-group" style="margin:0"><label>Heart Rate (bpm)</label><input class="form-input" type="number" id="rec-hr" placeholder="76"></div>
+                </div>
+              </div>
+
+              <!-- Row 3: Assessment & Routing -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+                <div class="form-group" style="margin:0;grid-column:1/-1"><label>Chief Complaint / Reason for Visit</label><input class="form-input" type="text" id="rec-cc" placeholder="e.g. Fever, chest pressure, routine checkup..."></div>
+                <div class="form-group" style="margin:0"><label>Triage Priority</label><select class="form-select" id="rec-priority"><option value="routine">Routine</option><option value="urgent">Urgent</option><option value="emergency">Emergency</option></select></div>
+                <div class="form-group" style="margin:0"><label>Route to Doctor *</label><select class="form-select" id="rec-doc" required></select></div>
+              </div>
+
+              <button class="btn btn-teal" type="submit" style="width:100%;padding:12px;font-size:14px;font-weight:700">🪪 Issue Card, Register &amp; Route Patient</button>
+            </form>
+          </div>
+
+          <!-- Reception Live Desk Info & Quick Cards -->
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="card" style="padding:22px">
+              <div class="card-hdr" style="margin-bottom:12px">
+                <div class="card-title">ℹ️ Reception Desk Intake Protocol</div>
+              </div>
+              <div style="font-size:13px;color:var(--tx2);line-height:1.6">
+                <p style="margin-bottom:8px">• Every registered patient receives a unique auto-generated <strong>MRN</strong> (e.g. PAT-007).</p>
+                <p style="margin-bottom:8px">• <strong>Initial Vitals</strong> (BP, SpO₂, Temp, Weight) are measured &amp; recorded at intake.</p>
+                <p>• Selecting a Doctor creates an instant appointment and routes the patient directly to their clinic queue.</p>
+              </div>
+            </div>
+
+            <!-- Quick Stats Banner for Reception Desk -->
+            <div class="card" style="padding:20px" id="rec-stats-banner">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Registered Cards & Triage Queue Table -->
+        <div class="card">
+          <div class="card-hdr">
+            <div>
+              <div class="card-title">📋 Today's Reception Triage &amp; Intake Queue</div>
+              <div class="card-sub">All patients registered and routed at reception desk</div>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th>MRN</th><th>Patient</th><th>Intake Vitals (SpO₂, BP, Temp, Wt)</th><th>Priority</th><th>Chief Complaint</th><th>Routed Doctor</th><th>Actions</th></tr></thead>
+              <tbody id="tb-reception-queue"></tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -1830,6 +1917,7 @@ function doLogout(){currentUser=null;document.getElementById('login').style.disp
 // ════ NAV ════
 const pgTitles={
   dashboard:'Dashboard <span>Overview</span>',
+  reception:'Card / Reception <span>Registration & Triage Desk</span>',
   patients:'Patients <span>Registry</span>',
   doctors:'Doctors <span>Registry</span>',
   appointments:'Appointments <span>Schedule</span>',
@@ -1913,7 +2001,7 @@ function renderDashboardStats() {
 function initApp(){
   renderPatients();renderDoctors();renderAppointments();renderTreatments();
   renderRooms();renderAdmissions();renderUsers();renderDepts();renderMeds();
-  renderBilling();populateSelects();initCharts();renderDashboardStats();
+  renderBilling();renderReceptionQueue();populateSelects();initCharts();renderDashboardStats();
   // Populate doctor dept select dynamically from DB
   refreshDoctorDeptSelect();
   if (typeof scanUpcomingAppointments === 'function') scanUpcomingAppointments(false);
@@ -2330,13 +2418,136 @@ function filterBillingStatus(s,el){
 // ════ SELECTS ════
 function populateSelects(){
   const pO=DB.patients.map(p=>`<option value="${p.id}">${p.first_name} ${p.last_name}</option>`).join('');
-  const dO=DB.doctors.map(d=>`<option value="${d.id}">Dr. ${d.first_name} ${d.last_name}</option>`).join('');
+  const dO=DB.doctors.map(d=>`<option value="${d.id}">Dr. ${d.first_name} ${d.last_name} (${gDept(d.department_id)})</option>`).join('');
   const rO=DB.rooms.filter(r=>r.status==='available').map(r=>`<option value="${r.id}">${r.room_number} (${r.type})</option>`).join('');
   const aO=`<option value="">— None —</option>`+DB.appointments.map(a=>`<option value="${a.id}">${gPat(a.patient_id)} — ${fDate(a.appointment_date)}</option>`).join('');
   ['a-pat','t-pat','adm-pat','inv-pat','inv-e-pat'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=pO});
-  ['a-doc','t-doc'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=dO});
+  ['a-doc','t-doc','rec-doc'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=dO});
   const er=document.getElementById('adm-rm');if(er)er.innerHTML=rO;
   const ea=document.getElementById('inv-appt');if(ea)ea.innerHTML=aO;
+}
+
+// ════ CARD / RECEPTION DESK FUNCTIONS ════
+function renderReceptionQueue() {
+  const queueTbody = document.getElementById('tb-reception-queue');
+  if (!queueTbody) return;
+
+  const rows = DB.patients.slice().reverse();
+
+  queueTbody.innerHTML = rows.length ? rows.map(p => {
+    const mrnStr = p.mrn || ('PAT-' + String(p.id).padStart(3, '0'));
+    const vParts = [];
+    if (p.spo2_pct) vParts.push(`SpO₂: <strong>${p.spo2_pct}%</strong>`);
+    if (p.blood_pressure) vParts.push(`BP: <strong>${p.blood_pressure}</strong>`);
+    if (p.temperature_c) vParts.push(`${p.temperature_c}°C`);
+    if (p.weight_kg) vParts.push(`${p.weight_kg}kg`);
+    const vitalsStr = vParts.length ? vParts.join(' · ') : '<span style="color:var(--tx3)">Not recorded</span>';
+
+    const appt = DB.appointments.find(a => a.patient_id === p.id);
+    const doctorStr = appt ? gDoc(appt.doctor_id) : '<span style="color:var(--tx3)">General Desk</span>';
+
+    const prioBadge = p.priority === 'emergency' ? '<span class="badge br">🚨 Emergency</span>' :
+                      p.priority === 'urgent' ? '<span class="badge by">⚡ Urgent</span>' :
+                      '<span class="badge bg">Routine</span>';
+
+    return `<tr>
+      <td><span style="color:var(--a);font-weight:700;font-family:monospace;font-size:13px">${mrnStr}</span></td>
+      <td><strong style="color:var(--tx)">${p.first_name} ${p.last_name}</strong><br><span style="font-size:11px;color:var(--tx3)">${p.phone || 'No phone'}</span></td>
+      <td style="font-size:12px">${vitalsStr}</td>
+      <td>${prioBadge}</td>
+      <td style="color:var(--tx3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.chief_complaint || '—'}</td>
+      <td><strong style="color:var(--a2)">${doctorStr}</strong></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="viewPatient(${p.id})">👁️ Card</button>
+          <button class="btn btn-teal btn-sm" onclick="showPage('appointments',document.getElementById('nav-appointments'))">👨‍⚕️ Queue</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="7"><div class="empty"><div class="eico">🪪</div><p>No intake records today</p></div></td></tr>`;
+
+  const banner = document.getElementById('rec-stats-banner');
+  if (banner) {
+    const totalIntake = DB.patients.length;
+    const urgentCnt = DB.patients.filter(p => p.priority === 'urgent' || p.priority === 'emergency').length;
+    banner.innerHTML = `
+      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:10px">📊 Reception Desk Intake Summary</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div style="padding:10px;background:rgba(0,210,170,.08);border-radius:8px">
+          <div style="font-size:11px;color:var(--tx3)">Total Cards Issued</div>
+          <div style="font-size:20px;font-weight:800;color:var(--a)">${totalIntake}</div>
+        </div>
+        <div style="padding:10px;background:rgba(244,63,94,.08);border-radius:8px">
+          <div style="font-size:11px;color:var(--tx3)">Urgent / Triage Cases</div>
+          <div style="font-size:20px;font-weight:800;color:var(--a4)">${urgentCnt}</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function submitReceptionTriage(e) {
+  e.preventDefault();
+  const fn = document.getElementById('rec-fn').value.trim();
+  const ln = document.getElementById('rec-ln').value.trim();
+  if (!fn || !ln) {
+    showToast('First and last name are required', 'error');
+    return;
+  }
+
+  const mrn = 'PAT-' + String(nxt.p).padStart(3, '0');
+  const docId = parseInt(document.getElementById('rec-doc').value);
+  const priority = document.getElementById('rec-priority').value;
+  const cc = document.getElementById('rec-cc').value.trim() || 'General Consultation';
+
+  const newPat = {
+    id: nxt.p++,
+    mrn: mrn,
+    first_name: fn,
+    last_name: ln,
+    gender: document.getElementById('rec-g').value,
+    birthdate: document.getElementById('rec-dob').value || null,
+    phone: document.getElementById('rec-ph').value.trim() || null,
+    address: document.getElementById('rec-addr').value.trim() || null,
+    status: 'active',
+    priority: priority,
+
+    weight_kg: parseFloat(document.getElementById('rec-wt').value) || null,
+    height_cm: parseFloat(document.getElementById('rec-ht').value) || null,
+    blood_pressure: document.getElementById('rec-bp').value.trim() || null,
+    temperature_c: parseFloat(document.getElementById('rec-temp').value) || null,
+    heart_rate_bpm: parseInt(document.getElementById('rec-hr').value) || null,
+    spo2_pct: parseInt(document.getElementById('rec-spo2').value) || null,
+
+    chief_complaint: cc
+  };
+
+  DB.patients.push(newPat);
+
+  if (docId) {
+    const nowIso = new Date().toISOString().slice(0, 16);
+    DB.appointments.push({
+      id: nxt.a++,
+      patient_id: newPat.id,
+      doctor_id: docId,
+      appointment_date: nowIso,
+      status: 'scheduled',
+      notes: `Reception Triage: ${cc} (Priority: ${priority.toUpperCase()})`
+    });
+  }
+
+  ['rec-fn','rec-ln','rec-dob','rec-ph','rec-addr','rec-bp','rec-spo2','rec-temp','rec-wt','rec-ht','rec-hr','rec-cc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  showToast(`🪪 Registered ${fn} ${ln} (${mrn}) & routed to ${gDoc(docId)}`, 'success');
+
+  renderPatients();
+  renderAppointments();
+  renderReceptionQueue();
+  renderDashboardStats();
+  populateSelects();
 }
 
 // ════ FILTERS ════
@@ -3503,6 +3714,7 @@ function handleAiResponse(text) {
 
   // ════ 1. AI INTENT DIRECTIVES (NAVIGATION & UI VIEW SWITCHING) ════
   const navRoutes = [
+    { keys: ['reception', 'card', 'triage', 'reception desk', 'desk'], page: 'reception', label: 'Card / Reception Desk' },
     { keys: ['appointment', 'appointments', 'schedule', 'schedules', 'calendar'], page: 'appointments', label: 'Appointments' },
     { keys: ['patient', 'patients', 'registry'], page: 'patients', label: 'Patients' },
     { keys: ['doctor', 'doctors', 'physician', 'physicians'], page: 'doctors', label: 'Doctors' },
