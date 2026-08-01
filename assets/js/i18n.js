@@ -9,10 +9,18 @@ const translations = {
     brand_name: "Nucleus HMS",
     system_title: "Nucleus Hospital Management System",
     welcome: "Welcome",
-    search_placeholder: "Search patients, doctors, records... (Ctrl+K)",
+    search_placeholder: "Search patients, doctors...",
+    cmd_placeholder: "Search patients, doctors, rooms, or actions...",
     language: "Language",
     english: "English",
-    amharic: "አማርኛ (Amharic)",
+    amharic: "አማርኛ",
+    
+    // Sidebar Sections
+    sb_sec_overview: "Overview",
+    sb_sec_clinical: "Clinical",
+    sb_sec_facility: "Facility",
+    sb_sec_finance: "Finance",
+    sb_sec_system: "System",
     
     // Nav Items
     nav_dashboard: "Dashboard",
@@ -25,26 +33,27 @@ const translations = {
     nav_billing: "Billing",
     nav_medications: "Medications",
     nav_departments: "Departments",
-    nav_users: "Users & Security",
+    nav_users: "Users",
     nav_settings: "Settings",
     nav_logout: "Logout",
     
     // Stats Cards
     stat_total_patients: "Total Patients",
     stat_active_doctors: "Active Doctors",
-    stat_scheduled_appts: "Scheduled Appointments",
-    stat_rooms_available: "Rooms Available",
+    stat_scheduled_appts: "Appointments",
+    stat_rooms_available: "Available Rooms",
     stat_active_admissions: "Active Admissions",
     stat_unpaid_invoices: "Unpaid Invoices",
     stat_total_revenue: "Total Revenue (ETB)",
     
     // AI Assistant
-    ai_assistant_title: "Nucleus AI Assistant",
-    ai_assistant_sub: "Active · Clinical Reminders & Intelligence",
+    ai_launcher_text: "Nucleus AI Assistant",
+    ai_title: "Nucleus AI Assistant",
+    ai_status: "Active · Clinical Reminders",
     ai_quick_appts: "📅 Upcoming Appointments",
     ai_quick_reminders: "📱 Draft Reminders",
     ai_quick_status: "🏥 Hospital Status",
-    ai_input_placeholder: "Ask AI Assistant or type patient name...",
+    ai_placeholder: "Ask AI Assistant or type patient name...",
     ai_send_sms: "📱 Send SMS",
     ai_send_whatsapp: "💬 Send WhatsApp",
     ai_reminder_draft: "AI Reminder Draft",
@@ -83,11 +92,11 @@ const translations = {
     th_amount: "Amount (ETB)",
     
     // Settings
-    sett_general: "General Settings",
+    sett_title: "System Settings",
+    sett_general: "General",
     sett_appearance: "Appearance",
-    sett_security: "Security & Password",
-    sett_alerts: "Notification Alerts",
-    sett_ai_config: "AI & Model Settings",
+    sett_account: "Account",
+    sett_notifications: "Alerts",
     
     // Toast Messages
     toast_login_success: "Successfully logged in to Nucleus HMS",
@@ -101,10 +110,18 @@ const translations = {
     brand_name: "ኒውክለየስ 病院",
     system_title: "ኒውክለየስ ሆስፒታል ማኔጅመንት ሲስተም",
     welcome: "እንኳን ደህና መጡ",
-    search_placeholder: "ታካሚዎችን፣ ዶክተሮችን፣ መዝገቦችን ይፈልጉ... (Ctrl+K)",
+    search_placeholder: "ታካሚዎችን፣ ዶክተሮችን ይፈልጉ...",
+    cmd_placeholder: "ታካሚዎችን፣ ዶክተሮችን፣ ክፍሎችን ይፈልጉ...",
     language: "ቋንቋ",
     english: "English",
     amharic: "አማርኛ",
+    
+    // Sidebar Sections
+    sb_sec_overview: "አጠቃላይ",
+    sb_sec_clinical: "ህክምና",
+    sb_sec_facility: "ህንፃና ክፍሎች",
+    sb_sec_finance: "ፋይናንስ",
+    sb_sec_system: "ሲስተም",
     
     // Nav Items
     nav_dashboard: "ዳሽቦርድ",
@@ -114,10 +131,10 @@ const translations = {
     nav_treatments: "ህክምናዎች",
     nav_rooms: "ክፍሎች",
     nav_admissions: "ክፍል የገቡ",
-    nav_billing: "ክፍያ እና ደረሰኝ",
+    nav_billing: "ክፍያና ደረሰኝ",
     nav_medications: "መድኃኒቶች",
-    nav_departments: "ክፍሎች/ዲፓርትመንቶች",
-    nav_users: "ተጠቃሚዎች እና ደህንነት",
+    nav_departments: "ዲፓርትመንቶች",
+    nav_users: "ተጠቃሚዎች",
     nav_settings: "ማስተካከያዎች",
     nav_logout: "ውጣ",
     
@@ -131,12 +148,13 @@ const translations = {
     stat_total_revenue: "ጠቅላላ ገቢ (ብር)",
     
     // AI Assistant
-    ai_assistant_title: "ኒውክለየስ ኤአይ ረዳት",
-    ai_assistant_sub: "ንቁ · ክሊኒካዊ ማስታወሻዎች እና መረጃ",
+    ai_launcher_text: "ኒውክለየስ ኤአይ ረዳት",
+    ai_title: "ኒውክለየስ ኤአይ ረዳት",
+    ai_status: "ንቁ · ክሊኒካዊ ማስታወሻዎች",
     ai_quick_appts: "📅 የሚመጡ ቀጠሮዎች",
-    ai_quick_reminders: "📱 ማስታወሻ ይጻፉ",
+    ai_quick_reminders: "📱 ረቂቅ ማስታወሻዎች",
     ai_quick_status: "🏥 የሆስፒታል ሁኔታ",
-    ai_input_placeholder: "ኤአይ ረዳቱን ጠይቅ ወይም የታካሚ ስም ፃፍ...",
+    ai_placeholder: "ኤአይ ረዳቱን ጠይቅ ወይም የታካሚ ስም ፃፍ...",
     ai_send_sms: "📱 በSMS ላክ",
     ai_send_whatsapp: "💬 በWhatsApp ላክ",
     ai_reminder_draft: "የኤአይ ማስታወሻ ረቂቅ",
@@ -175,11 +193,11 @@ const translations = {
     th_amount: "መጠን (ብር)",
     
     // Settings
-    sett_general: "ጠቅላላ ማስተካከያዎች",
+    sett_title: "የሲስተም ማስተካከያዎች",
+    sett_general: "ጠቅላላ",
     sett_appearance: "ገጽታ",
-    sett_security: "ደህንነት እና የይለፍ ቃል",
-    sett_alerts: "ማስታወቂያዎች",
-    sett_ai_config: "የኤአይ ማስተካከያ",
+    sett_account: "መለያ",
+    sett_notifications: "ማስታወቂያዎች",
     
     // Toast Messages
     toast_login_success: "ወደ ኒውክለየስ ሲስተም በተካካዮች ገብተዋል",
@@ -208,14 +226,25 @@ function t(key) {
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (key) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = t(key);
-      } else {
-        el.textContent = t(key);
+    if (!key) return;
+    const translatedText = t(key);
+    
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = translatedText;
+    } else {
+      // Find direct text node to preserve child icons and badge elements
+      let textNode = Array.from(el.childNodes).find(n => n.nodeType === Node.TEXT_NODE && n.nodeValue.trim() !== '');
+      if (textNode) {
+        textNode.nodeValue = ' ' + translatedText + ' ';
+      } else if (!el.children.length) {
+        el.textContent = translatedText;
       }
     }
   });
+
+  // Sync header language selector dropdown
+  const select = document.getElementById('lang-select');
+  if (select) select.value = currentLang;
 
   // Update HTML lang attribute
   document.documentElement.lang = currentLang;
