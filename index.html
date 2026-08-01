@@ -752,46 +752,46 @@ input,select,textarea{font-family:inherit}
       </div>
     </div>
 
-    <div class="sb-sec" data-i18n="sb_sec_overview">Overview</div>
-    <div class="sb-item active" id="nav-dashboard" onclick="showPage('dashboard',this)" data-i18n="nav_dashboard">
+    <div class="sb-sec">Overview</div>
+    <div class="sb-item active" id="nav-dashboard" onclick="showPage('dashboard',this)">
       <span class="sico2">📊</span> Dashboard
     </div>
 
-    <div class="sb-sec" data-i18n="sb_sec_clinical">Clinical</div>
-    <div class="sb-item" id="nav-patients" onclick="showPage('patients',this)" data-i18n="nav_patients">
+    <div class="sb-sec">Clinical</div>
+    <div class="sb-item" id="nav-patients" onclick="showPage('patients',this)">
       <span class="sico2">🧑‍⚕️</span> Patients <span class="sb-badge" id="nb-patients">6</span>
     </div>
-    <div class="sb-item" id="nav-doctors" onclick="showPage('doctors',this)" data-i18n="nav_doctors">
+    <div class="sb-item" id="nav-doctors" onclick="showPage('doctors',this)">
       <span class="sico2">👨‍⚕️</span> Doctors <span class="sb-badge" id="nb-doctors">4</span>
     </div>
-    <div class="sb-item" id="nav-appointments" onclick="showPage('appointments',this)" data-i18n="nav_appointments">
+    <div class="sb-item" id="nav-appointments" onclick="showPage('appointments',this)">
       <span class="sico2">📅</span> Appointments <span class="sb-badge" id="nb-appts">5</span>
     </div>
-    <div class="sb-item" id="nav-treatments" onclick="showPage('treatments',this)" data-i18n="nav_treatments">
+    <div class="sb-item" id="nav-treatments" onclick="showPage('treatments',this)">
       <span class="sico2">💊</span> Treatments
     </div>
 
-    <div class="sb-sec" data-i18n="sb_sec_facility">Facility</div>
-    <div class="sb-item" id="nav-rooms" onclick="showPage('rooms',this)" data-i18n="nav_rooms">
+    <div class="sb-sec">Facility</div>
+    <div class="sb-item" id="nav-rooms" onclick="showPage('rooms',this)">
       <span class="sico2">🛏</span> Rooms <span class="sb-badge" id="nb-rooms">11</span>
     </div>
-    <div class="sb-item" id="nav-admissions" onclick="showPage('admissions',this)" data-i18n="nav_admissions">
+    <div class="sb-item" id="nav-admissions" onclick="showPage('admissions',this)">
       <span class="sico2">🏨</span> Admissions
     </div>
 
-    <div class="sb-sec" data-i18n="sb_sec_finance">Finance</div>
-    <div class="sb-item" id="nav-billing" onclick="showPage('billing',this)" data-i18n="nav_billing">
+    <div class="sb-sec">Finance</div>
+    <div class="sb-item" id="nav-billing" onclick="showPage('billing',this)">
       <span class="sico2">💳</span> Billing <span class="sb-badge" id="nb-billing">3</span>
     </div>
 
-    <div class="sb-sec" data-i18n="sb_sec_system">System</div>
-    <div class="sb-item" id="nav-users" onclick="showPage('users',this)" data-i18n="nav_users">
+    <div class="sb-sec">System</div>
+    <div class="sb-item" id="nav-users" onclick="showPage('users',this)">
       <span class="sico2">👥</span> Users
     </div>
-    <div class="sb-item" id="nav-departments" onclick="showPage('departments',this)" data-i18n="nav_departments">
+    <div class="sb-item" id="nav-departments" onclick="showPage('departments',this)">
       <span class="sico2">🏛</span> Departments
     </div>
-    <div class="sb-item" id="nav-medications" onclick="showPage('medications',this)" data-i18n="nav_medications">
+    <div class="sb-item" id="nav-medications" onclick="showPage('medications',this)">
       <span class="sico2">🧴</span> Medications
     </div>
 
@@ -811,7 +811,7 @@ input,select,textarea{font-family:inherit}
       <div class="header-title" id="pg-title">Dashboard <span>Overview</span></div>
       <div class="header-search">
         <span style="color:var(--tx3)">🔍</span>
-        <input type="text" data-i18n="search_placeholder" placeholder="Search patients, doctors...">
+        <input type="text" placeholder="Search patients, doctors...">
       </div>
       <button class="hbtn" id="notif-btn" onclick="toggleNotifDropdown(event)" style="position:relative">
         🔔
@@ -833,7 +833,7 @@ input,select,textarea{font-family:inherit}
               <div class="stat-trend trend-up">↑ 12%</div>
             </div>
             <div class="stat-val" data-count="6">0</div>
-            <div class="stat-label" data-i18n="stat_total_patients">Total Patients</div>
+            <div class="stat-label">Total Patients</div>
           </div>
           <div class="stat-card">
             <div class="stat-hdr">
@@ -841,7 +841,7 @@ input,select,textarea{font-family:inherit}
               <div class="stat-trend trend-up">↑ 1</div>
             </div>
             <div class="stat-val" data-count="4">0</div>
-            <div class="stat-label" data-i18n="stat_active_doctors">Active Doctors</div>
+            <div class="stat-label">Active Doctors</div>
           </div>
           <div class="stat-card">
             <div class="stat-hdr">
@@ -849,7 +849,7 @@ input,select,textarea{font-family:inherit}
               <div class="stat-trend trend-up">↑ 8%</div>
             </div>
             <div class="stat-val" data-count="5">0</div>
-            <div class="stat-label" data-i18n="stat_scheduled_appts">Appointments</div>
+            <div class="stat-label">Appointments</div>
           </div>
           <div class="stat-card">
             <div class="stat-hdr">
@@ -857,7 +857,7 @@ input,select,textarea{font-family:inherit}
               <div class="stat-trend trend-dn">↓ 2</div>
             </div>
             <div class="stat-val" data-count="8">0</div>
-            <div class="stat-label" data-i18n="stat_rooms_available">Available Rooms</div>
+            <div class="stat-label">Available Rooms</div>
           </div>
           <div class="stat-card">
             <div class="stat-hdr">
@@ -865,7 +865,7 @@ input,select,textarea{font-family:inherit}
               <div class="stat-trend trend-up">↑ 5%</div>
             </div>
             <div class="stat-val" data-count="3">0</div>
-            <div class="stat-label" data-i18n="stat_active_admissions">Active Admissions</div>
+            <div class="stat-label">Active Admissions</div>
           </div>
           <div class="stat-card">
             <div class="stat-hdr">
@@ -1471,7 +1471,7 @@ input,select,textarea{font-family:inherit}
     <div class="cmd-palette">
       <div class="cmd-input-wrap">
         <span class="cico">🔍</span>
-        <input type="text" id="cmd-input" class="cmd-input" data-i18n="cmd_placeholder" placeholder="Search patients, doctors, rooms, or actions..." autocomplete="off">
+        <input type="text" id="cmd-input" class="cmd-input" placeholder="Search patients, doctors, rooms, or actions..." autocomplete="off">
         <span style="font-size:10px;color:var(--tx3);background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px">ESC</span>
       </div>
       <div class="cmd-results" id="cmd-results">
@@ -1483,7 +1483,7 @@ input,select,textarea{font-family:inherit}
   <!-- ════ AI ASSISTANT CHAT WIDGET ════ -->
   <div id="ai-chat-launcher" onclick="toggleAiChat()" title="Open AI Assistant (Ctrl+Shift+A)">
     <div class="ai-launcher-ico">🤖</div>
-    <div class="ai-launcher-text" data-i18n="ai_launcher_text">Nucleus AI Assistant</div>
+    <div class="ai-launcher-text">Nucleus AI Assistant</div>
     <span class="ai-badge" id="ai-pending-badge">2</span>
   </div>
 
@@ -1492,8 +1492,8 @@ input,select,textarea{font-family:inherit}
       <div style="display:flex;align-items:center;gap:10px">
         <div class="ai-avatar">🤖</div>
         <div>
-          <div class="ai-chat-title" data-i18n="ai_title">Nucleus AI Assistant</div>
-          <div class="ai-chat-status"><span class="ai-status-dot" id="ai-status-dot"></span> <span id="ai-status-text" data-i18n="ai_status">Active · Clinical Reminders</span></div>
+          <div class="ai-chat-title">Nucleus AI Assistant</div>
+          <div class="ai-chat-status"><span class="ai-status-dot" id="ai-status-dot"></span> <span id="ai-status-text">Active · Clinical Reminders</span></div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
@@ -1510,12 +1510,12 @@ input,select,textarea{font-family:inherit}
 
     <div class="ai-chat-footer">
       <div class="ai-quick-prompts">
-        <button onclick="sendQuickPrompt('Upcoming Appointments')" data-i18n="ai_quick_appts">📅 Upcoming Appointments</button>
-        <button onclick="sendQuickPrompt('Draft Reminders')" data-i18n="ai_quick_reminders">📱 Draft Reminders</button>
-        <button onclick="sendQuickPrompt('Hospital Status')" data-i18n="ai_quick_status">🏥 Hospital Status</button>
+        <button onclick="sendQuickPrompt('Upcoming Appointments')">📅 Upcoming Appointments</button>
+        <button onclick="sendQuickPrompt('Draft Reminders')">📱 Draft Reminders</button>
+        <button onclick="sendQuickPrompt('Hospital Status')">🏥 Hospital Status</button>
       </div>
       <div class="ai-input-wrap">
-        <input type="text" id="ai-chat-input" data-i18n="ai_placeholder" placeholder="Ask AI Assistant or type patient name..." onkeydown="if(event.key==='Enter')handleAiSend()">
+        <input type="text" id="ai-chat-input" placeholder="Ask AI Assistant or type patient name..." onkeydown="if(event.key==='Enter')handleAiSend()">
         <button class="ai-mic-btn" id="ai-mic-btn" onclick="toggleVoiceInput()" title="Voice Input">🎤</button>
         <button class="ai-send-btn" id="ai-send-btn" onclick="handleAiSend()">➔</button>
       </div>
@@ -3181,6 +3181,13 @@ function handleAiResponse(text) {
 
   // General fallback
   addAiMessage('bot', `🤖 I analyzed your query: "${text}".\nI am connected to the live hospital database. Try asking:\n• *"Find Abebe Kebede"*\n• *"List room availability"*\n• *"Show doctor list"*\n• *"Draft reminders"*`);
+}
+
+// Auto-initialize application and render all mock data tables immediately on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
 }
 </script>
 </body>
