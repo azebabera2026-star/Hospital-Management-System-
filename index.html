@@ -1723,10 +1723,55 @@ function sBadge(s){
 function actBtns(ef,df){return`<div style="display:flex;gap:6px"><button class="btn btn-ghost btn-sm btn-ico" onclick="${ef}" title="Edit">✏️</button><button class="btn btn-danger btn-sm btn-ico" onclick="${df}" title="Delete">🗑</button></div>`}
 
 // ════ INIT ════
+function renderDashboardStats() {
+  const statsMap = {
+    'Total Patients': DB.patients.length,
+    'Active Doctors': DB.doctors.length,
+    'Appointments': DB.appointments.length,
+    'Available Rooms': DB.rooms.filter(r => r.status === 'available').length,
+    'Active Admissions': DB.admissions.filter(a => !a.discharged_on).length,
+    'Medications': DB.medications.length
+  };
+
+  const cards = document.querySelectorAll('.stat-card');
+  cards.forEach(card => {
+    const labelEl = card.querySelector('.stat-label');
+    const valEl = card.querySelector('.stat-val');
+    if (!labelEl || !valEl) return;
+
+    const labelText = labelEl.textContent.trim();
+    const targetVal = statsMap[labelText] !== undefined ? statsMap[labelText] : (parseInt(valEl.getAttribute('data-count')) || 0);
+
+    valEl.setAttribute('data-count', targetVal);
+
+    // Smooth counter animation
+    let current = 0;
+    const duration = 500;
+    const stepTime = 30;
+    const steps = duration / stepTime;
+    const increment = targetVal / steps;
+
+    if (targetVal === 0) {
+      valEl.textContent = '0';
+      return;
+    }
+
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= targetVal) {
+        valEl.textContent = targetVal;
+        clearInterval(timer);
+      } else {
+        valEl.textContent = Math.floor(current);
+      }
+    }, stepTime);
+  });
+}
+
 function initApp(){
   renderPatients();renderDoctors();renderAppointments();renderTreatments();
   renderRooms();renderAdmissions();renderUsers();renderDepts();renderMeds();
-  renderBilling();populateSelects();initCharts();
+  renderBilling();populateSelects();initCharts();renderDashboardStats();
   // Populate doctor dept select dynamically from DB
   refreshDoctorDeptSelect();
   if (typeof scanUpcomingAppointments === 'function') scanUpcomingAppointments(false);
@@ -3130,34 +3175,65 @@ function handleAiSend() {
 
 function handleAiResponse(text) {
   const normQ = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(text) : text.toLowerCase();
-  
-  // Patient search — case-insensitive English name matching
+  const q = normQ;
+
+  // ════ 1. AI INTENT DIRECTIVES (NAVIGATION & UI VIEW SWITCHING) ════
+  const navRoutes = [
+    { keys: ['appointment', 'appointments', 'schedule', 'schedules', 'calendar'], page: 'appointments', label: 'Appointments' },
+    { keys: ['patient', 'patients', 'registry'], page: 'patients', label: 'Patients' },
+    { keys: ['doctor', 'doctors', 'physician', 'physicians'], page: 'doctors', label: 'Doctors' },
+    { keys: ['treatment', 'treatments', 'diagnosis', 'prescriptions'], page: 'treatments', label: 'Treatments' },
+    { keys: ['room', 'rooms', 'bed', 'beds', 'icu', 'ward'], page: 'rooms', label: 'Rooms' },
+    { keys: ['admission', 'admissions', 'inpatient'], page: 'admissions', label: 'Admissions' },
+    { keys: ['billing', 'invoice', 'invoices', 'payment', 'revenue', 'financial'], page: 'billing', label: 'Billing' },
+    { keys: ['user', 'users', 'account', 'accounts', 'security'], page: 'users', label: 'Users' },
+    { keys: ['department', 'departments', 'dept'], page: 'departments', label: 'Departments' },
+    { keys: ['medication', 'medications', 'drug', 'pharmacy'], page: 'medications', label: 'Medications' },
+    { keys: ['dashboard', 'home', 'overview'], page: 'dashboard', label: 'Dashboard' }
+  ];
+
+  // If text contains navigation action verbs like "go to", "open", "show", "view", "switch to", "take me to"
+  const isNavAction = /(go\s*to|open|show|view|switch\s*to|take\s*me\s*to|display|navigate)/i.test(text);
+
+  if (isNavAction) {
+    for (const route of navRoutes) {
+      if (route.keys.some(k => q.includes(k))) {
+        showPage(route.page);
+        addAiMessage('bot', `📍 Navigated to **${route.label}** page.`);
+        return;
+      }
+    }
+  }
+
+  // ════ 2. PATIENT SEARCH MATCH ════
   const patientMatch = DB.patients.find(p => {
     const fn = p.first_name.toLowerCase();
     const ln = p.last_name.toLowerCase();
     const fullName = `${fn} ${ln}`;
-    return normQ.includes(fn) || normQ.includes(ln) || normQ.includes(fullName);
+    return q.includes(fn) || q.includes(ln) || q.includes(fullName);
   });
   if (patientMatch) {
     const p = patientMatch;
     const appts = DB.appointments.filter(a => a.patient_id === p.id);
     const lastAppt = appts[0];
     const doctor = lastAppt ? DB.doctors.find(d => d.id === lastAppt.doctor_id) : null;
+    showPage('patients');
     addAiMessage('bot', `🔍 Found Patient Record for **${p.first_name} ${p.last_name}**:\n• Gender: **${p.gender}**\n• Phone: **${p.phone||'—'}**\n• Address: **${p.address||'—'}**\n• Total Appointments: **${appts.length}**`);
     if (lastAppt) renderAiAppointmentCard(lastAppt, p, doctor || {first_name:'Staff', last_name:''});
     return;
   }
 
-  // Doctor match
+  // ════ 3. DOCTOR SEARCH MATCH ════
   const docMatch = DB.doctors.find(d => q.includes(d.first_name.toLowerCase()) || q.includes(d.last_name.toLowerCase()) || q.includes((d.specialization||'').toLowerCase()));
   if (docMatch) {
     const d = docMatch;
     const dept = DB.departments.find(dp => dp.id === d.department_id);
+    showPage('doctors');
     addAiMessage('bot', `👨‍⚕️ Doctor Info: **Dr. ${d.first_name} ${d.last_name}**\n• Specialization: **${d.specialization||'General'}**\n• Department: **${dept?dept.name:'General'}**\n• Email: **${d.email}**\n• Phone: **${d.phone||'—'}**`);
     return;
   }
 
-  // Rooms query
+  // ════ 4. ROOMS QUERY ════
   if (q.includes('room') || q.includes('bed') || q.includes('icu') || q.includes('capacity')) {
     const avail = DB.rooms.filter(r => r.status==='available').length;
     const occ = DB.rooms.filter(r => r.status==='occupied').length;
@@ -3165,13 +3241,13 @@ function handleAiResponse(text) {
     return;
   }
 
-  // Reminders query
-  if (q.includes('remind') || q.includes('sms') || q.includes('whatsapp') || q.includes('appointment')) {
+  // ════ 5. REMINDERS QUERY ════
+  if (q.includes('remind') || q.includes('sms') || q.includes('whatsapp')) {
     scanUpcomingAppointments(true);
     return;
   }
 
-  // Billing query
+  // ════ 6. BILLING QUERY ════
   if (q.includes('bill') || q.includes('invoice') || q.includes('payment') || q.includes('revenue')) {
     const unpaid = DB.invoices.filter(i => i.status==='unpaid').length;
     const totalRev = DB.invoices.filter(i => i.status==='paid').reduce((s,i)=>s+i.paid_amount, 0);
@@ -3179,8 +3255,8 @@ function handleAiResponse(text) {
     return;
   }
 
-  // General fallback
-  addAiMessage('bot', `🤖 I analyzed your query: "${text}".\nI am connected to the live hospital database. Try asking:\n• *"Find Abebe Kebede"*\n• *"List room availability"*\n• *"Show doctor list"*\n• *"Draft reminders"*`);
+  // ════ 7. GENERAL FALLBACK ════
+  addAiMessage('bot', `🤖 I analyzed your query: "${text}".\nI am connected to the live hospital database. Try asking:\n• *"Go to Appointments page"*\n• *"Open Patients"*\n• *"Show Doctors"*\n• *"Find Abebe Kebede"*`);
 }
 
 // Auto-initialize application and render all mock data tables immediately on load
