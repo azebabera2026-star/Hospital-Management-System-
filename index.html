@@ -1194,7 +1194,8 @@ input,select,textarea{font-family:inherit}
         <div class="form-group" style="margin:0"><label>Height (cm)</label><input class="form-input" type="number" id="p-ht" placeholder="e.g. 170" step="0.1" min="0"></div>
         <div class="form-group" style="margin:0"><label>Blood Pressure (mmHg)</label><input class="form-input" type="text" id="p-bp" placeholder="e.g. 120/80"></div>
         <div class="form-group" style="margin:0"><label>Temperature (°C)</label><input class="form-input" type="number" id="p-temp" placeholder="e.g. 36.7" step="0.1" min="30" max="44"></div>
-        <div class="form-group" style="margin:0;grid-column:1/-1"><label>Heart Rate (bpm)</label><input class="form-input" type="number" id="p-hr" placeholder="e.g. 78" min="0" max="300"></div>
+        <div class="form-group" style="margin:0"><label>Heart Rate (bpm)</label><input class="form-input" type="number" id="p-hr" placeholder="e.g. 78" min="0" max="300"></div>
+        <div class="form-group" style="margin:0"><label>Oxygen Saturation (SpO₂ %)</label><input class="form-input" type="number" id="p-spo2" placeholder="e.g. 98" min="0" max="100" step="1"></div>
       </div>
     </div>
 
@@ -1619,7 +1620,7 @@ const DB = {
   ],
   patients:[
     {id:1,mrn:'PAT-001',first_name:'Abebe',last_name:'Kebede',gender:'male',birthdate:'1982-05-14',phone:'+251-911-123456',address:'Bole Sub-City, Ward 03, Addis Ababa',
-     weight_kg:78,height_cm:175,blood_pressure:'145/92',temperature_c:36.8,heart_rate_bpm:82,
+     weight_kg:78,height_cm:175,blood_pressure:'145/92',temperature_c:36.8,heart_rate_bpm:82,spo2_pct:97,
      chief_complaint:'Persistent headache and dizziness for 3 weeks',
      symptoms:'Headache, dizziness, occasional chest tightness, shortness of breath on exertion',
      diagnosis:'Essential hypertension — Stage 2',
@@ -1630,7 +1631,7 @@ const DB = {
      medical_history:'Diagnosed with HTN in 2020; Father had MI at age 58; Non-smoker; Social drinker',
      emergency_contact_name:'Tigist Kebede (Wife)',emergency_contact_phone:'+251-911-999001',status:'active'},
     {id:2,mrn:'PAT-002',first_name:'Almaz',last_name:'Tesfaye',gender:'female',birthdate:'1994-11-02',phone:'+251-911-234567',address:'Kazanchis, Ward 08, Addis Ababa',
-     weight_kg:62,height_cm:163,blood_pressure:'118/76',temperature_c:37.1,heart_rate_bpm:74,
+     weight_kg:62,height_cm:163,blood_pressure:'118/76',temperature_c:37.1,heart_rate_bpm:74,spo2_pct:99,
      chief_complaint:'Right knee pain and swelling after a fall 2 weeks ago',
      symptoms:'Right knee pain (7/10), swelling, limited range of motion, difficulty weight-bearing',
      diagnosis:'Meniscal tear, right knee — medial compartment',
@@ -1641,7 +1642,7 @@ const DB = {
      medical_history:'No previous musculoskeletal injuries; Active lifestyle, runs 5K weekly; No chronic conditions',
      emergency_contact_name:'Bekele Tesfaye (Father)',emergency_contact_phone:'+251-911-999002',status:'admitted'},
     {id:3,mrn:'PAT-003',first_name:'Chala',last_name:'Bekele',gender:'male',birthdate:'2016-07-20',phone:'+251-911-345678',address:'Sarbet, Old Airport Area, Addis Ababa',
-     weight_kg:22,height_cm:118,blood_pressure:'98/62',temperature_c:36.5,heart_rate_bpm:96,
+     weight_kg:22,height_cm:118,blood_pressure:'98/62',temperature_c:36.5,heart_rate_bpm:96,spo2_pct:98,
      chief_complaint:'Routine vaccination and developmental check-up',
      symptoms:'No acute complaints; mild rhinorrhea, mild cough for 4 days',
      diagnosis:'Well child visit — mild upper respiratory infection (viral)',
@@ -1652,7 +1653,7 @@ const DB = {
      medical_history:'Birth: 38 weeks GA, no complications; up-to-date on immunizations; No hospitalizations',
      emergency_contact_name:'Bekele Chala (Father)',emergency_contact_phone:'+251-911-999003',status:'active'},
     {id:4,mrn:'PAT-004',first_name:'Tigist',last_name:'Assefa',gender:'female',birthdate:'1978-03-30',phone:'+251-911-456789',address:'Piassa, Churchill Avenue, Addis Ababa',
-     weight_kg:70,height_cm:160,blood_pressure:'132/84',temperature_c:36.9,heart_rate_bpm:78,
+     weight_kg:70,height_cm:160,blood_pressure:'132/84',temperature_c:36.9,heart_rate_bpm:78,spo2_pct:99,
      chief_complaint:'Recurrent headaches and visual disturbances over past 6 months',
      symptoms:'Migraines (5-6 episodes/month), visual aura, nausea, photophobia, neck stiffness',
      diagnosis:'Migraine with aura — under neurological evaluation',
@@ -1663,7 +1664,7 @@ const DB = {
      medical_history:'Migraines since age 25; OCP use (10 years); Occasional alcohol use; Stress-related trigger',
      emergency_contact_name:'Assefa Girma (Husband)',emergency_contact_phone:'+251-911-999004',status:'active'},
     {id:5,mrn:'PAT-005',first_name:'Solomon',last_name:'Berhanu',gender:'male',birthdate:'1970-09-12',phone:'+251-912-567890',address:'Arat Kilo, University District, Addis Ababa',
-     weight_kg:88,height_cm:178,blood_pressure:'158/98',temperature_c:37.0,heart_rate_bpm:88,
+     weight_kg:88,height_cm:178,blood_pressure:'158/98',temperature_c:37.0,heart_rate_bpm:88,spo2_pct:94,
      chief_complaint:'Chest pain and shortness of breath',
      symptoms:'Central chest pressure, dyspnea on exertion, fatigue, lower limb oedema',
      diagnosis:'Hyperlipidemia; Hypertension Stage 2; Stable angina — workup ongoing',
@@ -1674,7 +1675,7 @@ const DB = {
      medical_history:'Hypertension 10 years; Family history of CAD (brother — CABG at 55); 20 pack-year smoker (quit 2020)',
      emergency_contact_name:'Almaz Berhanu (Wife)',emergency_contact_phone:'+251-912-999005',status:'discharged'},
     {id:6,mrn:'PAT-006',first_name:'Hiwot',last_name:'Tadesse',gender:'female',birthdate:'1990-01-22',phone:'+251-913-678901',address:'Bole Atlas, Ward 04, Addis Ababa',
-     weight_kg:58,height_cm:165,blood_pressure:'122/80',temperature_c:37.3,heart_rate_bpm:92,
+     weight_kg:58,height_cm:165,blood_pressure:'122/80',temperature_c:37.3,heart_rate_bpm:92,spo2_pct:98,
      chief_complaint:'Atypical chest pain and palpitations',
      symptoms:'Sharp left-sided chest pain (non-exertional), palpitations, mild dyspnea, anxiety',
      diagnosis:'Chest pain — atypical; R/O cardiac cause; Anxiety disorder suspected',
@@ -1958,7 +1959,11 @@ function renderPatients(f=''){
     ?rows.map(p=>{
       const ageStr = calcAge(p.birthdate);
       const genderIco = p.gender==='male'?'👨':p.gender==='female'?'👩':'👤';
-      const vitalsSummary = p.blood_pressure ? `BP: <strong>${p.blood_pressure}</strong>${p.weight_kg ? ` · ${p.weight_kg}kg` : ''}` : '<span style="color:var(--tx3)">No vitals</span>';
+      const vParts = [];
+      if (p.blood_pressure) vParts.push(`BP: <strong>${p.blood_pressure}</strong>`);
+      if (p.weight_kg) vParts.push(`${p.weight_kg}kg`);
+      if (p.spo2_pct) vParts.push(`SpO₂: <strong>${p.spo2_pct}%</strong>`);
+      const vitalsSummary = vParts.length ? vParts.join(' · ') : '<span style="color:var(--tx3)">No vitals</span>';
       const statusBadge = sBadge(p.status || 'active');
       return `<tr>
         <td><span style="color:var(--a);font-weight:700;font-family:monospace;font-size:13px">${p.mrn||'PAT-'+String(p.id).padStart(3,'0')}</span></td>
@@ -1992,8 +1997,9 @@ function viewPatient(id) {
 
   document.getElementById('m-pview-body').innerHTML = `
     <!-- Vitals Summary Banner -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:20px;padding:16px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:12px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:20px;padding:16px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:12px">
       <div><div style="font-size:11px;color:var(--tx3)">Blood Pressure</div><div style="font-size:15px;font-weight:700;color:var(--a)">${p.blood_pressure || '—'}</div></div>
+      <div><div style="font-size:11px;color:var(--tx3)">Oxygen (SpO₂)</div><div style="font-size:15px;font-weight:700;color:#10b981">${p.spo2_pct ? p.spo2_pct + '%' : '—'}</div></div>
       <div><div style="font-size:11px;color:var(--tx3)">Heart Rate</div><div style="font-size:15px;font-weight:700;color:var(--a2)">${p.heart_rate_bpm ? p.heart_rate_bpm + ' bpm' : '—'}</div></div>
       <div><div style="font-size:11px;color:var(--tx3)">Temperature</div><div style="font-size:15px;font-weight:700;color:var(--a3)">${p.temperature_c ? p.temperature_c + ' °C' : '—'}</div></div>
       <div><div style="font-size:11px;color:var(--tx3)">Weight &amp; Height</div><div style="font-size:14px;font-weight:600;color:var(--tx)">${p.weight_kg ? p.weight_kg + ' kg' : '—'} / ${p.height_cm ? p.height_cm + ' cm' : '—'}</div></div>
@@ -2050,7 +2056,7 @@ function openAddPatient() {
   document.getElementById('p-mrn').value = nextMrn;
   document.getElementById('m-patient-title').textContent = 'Add New Patient';
   document.getElementById('m-patient-btn').textContent = 'Add Patient';
-  ['p-fn','p-ln','p-dob','p-ph','p-addr','p-wt','p-ht','p-bp','p-temp','p-hr','p-cc','p-sym','p-diag','p-inv','p-img','p-ref','p-allergy','p-hx','p-ec-name','p-ec-phone'].forEach(id => {
+  ['p-fn','p-ln','p-dob','p-ph','p-addr','p-wt','p-ht','p-bp','p-temp','p-hr','p-spo2','p-cc','p-sym','p-diag','p-inv','p-img','p-ref','p-allergy','p-hx','p-ec-name','p-ec-phone'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -2077,6 +2083,7 @@ function editPatient(id){
   document.getElementById('p-bp').value = p.blood_pressure || '';
   document.getElementById('p-temp').value = p.temperature_c || '';
   document.getElementById('p-hr').value = p.heart_rate_bpm || '';
+  document.getElementById('p-spo2').value = p.spo2_pct || '';
 
   document.getElementById('p-cc').value = p.chief_complaint || '';
   document.getElementById('p-sym').value = p.symptoms || '';
@@ -2116,6 +2123,7 @@ function savePatient(){
     blood_pressure: document.getElementById('p-bp').value.trim() || null,
     temperature_c: parseFloat(document.getElementById('p-temp').value) || null,
     heart_rate_bpm: parseInt(document.getElementById('p-hr').value) || null,
+    spo2_pct: parseInt(document.getElementById('p-spo2').value) || null,
 
     chief_complaint: document.getElementById('p-cc').value.trim() || null,
     symptoms: document.getElementById('p-sym').value.trim() || null,
