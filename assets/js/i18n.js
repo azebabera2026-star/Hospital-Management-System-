@@ -224,3 +224,66 @@ function applyTranslations() {
 document.addEventListener('DOMContentLoaded', () => {
   applyTranslations();
 });
+
+// ════ AMHARIC TO ENGLISH NAME MAPPING & SEARCH NORMALIZER ════
+const AMHARIC_NAME_MAP = {
+  // Common Ethiopian First Names
+  'አልማዝ': 'Almaz',
+  'አበበ': 'Abebe',
+  'ጫላ': 'Chala',
+  'ትግስት': 'Tigist',
+  'ሰለሞን': 'Solomon',
+  'ሕይወት': 'Hiwot',
+  'ዳዊት': 'Dawit',
+  'ቤተልሔም': 'Bethlehem',
+  'ዮናስ': 'Yonas',
+  'ኃይለማርያም': 'Hailemariam',
+  'መሐመድ': 'Mohammed',
+  'ፋጡማ': 'Fatuma',
+  'ሀይሉ': 'Hailu',
+  'ግርማ': 'Girma',
+  'ታደለ': 'Tadele',
+  'መላኩ': 'Melaku',
+  'አስናቀ': 'Asnake',
+  'ወንድሙ': 'Wondimu',
+  'ኤልያስ': 'Elias',
+  'ሀና': 'Hanna',
+  'መብራቱ': 'Mebratu',
+
+  // Common Ethiopian Last Names / Surnames
+  'ተስፋዬ': 'Tesfaye',
+  'ከበደ': 'Kebede',
+  'በቀለ': 'Bekele',
+  'አሰፋ': 'Assefa',
+  'ብርሃኑ': 'Berhanu',
+  'ታደሰ': 'Tadesse',
+  'አለሙ': 'Alemu',
+  'ወርቁ': 'Worku',
+  'ተክሌ': 'Tekle',
+  'ሀይሌ': 'Haile',
+  'ገብሬ': 'Gebre',
+  'ነጋሽ': 'Negash',
+  'ደስታ': 'Desta',
+  'በላይ': 'Belay',
+  'ተሾመ': 'Teshome',
+  'እስቲፋኖስ': 'Estifanos'
+};
+
+/**
+ * Case-insensitive search normalizer with automatic Amharic-to-English name mapping.
+ * Translates any Ge'ez script words (e.g. 'አልማዝ ተስፋዬ') into English ('almaz tesfaye')
+ * and normalizes whitespace/case so searches like 'where is አልማዝ ተስፋዬ' match 'Almaz Tesfaye'.
+ */
+function normalizeSearchQuery(query) {
+  if (!query) return '';
+  let q = query.toLowerCase().trim();
+
+  // Replace all mapped Amharic terms with English counterparts
+  for (const [amharic, english] of Object.entries(AMHARIC_NAME_MAP)) {
+    if (q.includes(amharic)) {
+      q = q.replace(new RegExp(amharic, 'g'), english.toLowerCase());
+    }
+  }
+
+  return q;
+}

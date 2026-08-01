@@ -1743,7 +1743,14 @@ function refreshDoctorDeptSelect(){
 
 // ════ RENDERS ════
 function renderPatients(f=''){
-  const rows=DB.patients.filter(p=>!f||(p.first_name+' '+p.last_name+p.email+p.phone).toLowerCase().includes(f.toLowerCase()));
+  const normF = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(f) : (f||'').toLowerCase();
+  const rows = DB.patients.filter(p => {
+    if (!normF) return true;
+    const fn = p.first_name.toLowerCase();
+    const ln = p.last_name.toLowerCase();
+    const target = `${fn} ${ln} ${p.email||''} ${p.phone||''} ${p.address||''}`.toLowerCase();
+    return target.includes(normF) || normF.includes(fn) || normF.includes(ln);
+  });
   document.getElementById('tb-patients').innerHTML=rows.length
     ?rows.map(p=>`<tr>
       <td><span style="color:var(--tx3);font-weight:600">#${p.id}</span></td>
@@ -2674,10 +2681,11 @@ function fetchCmdResults(query) {
   }
 
   const q = query.toLowerCase();
+  const normQ = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(query) : q;
   let results = [];
 
   pages.forEach(p => {
-    if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) {
+    if (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q) || p.title.toLowerCase().includes(normQ)) {
       results.push({icon:p.icon, title:p.title, desc:p.desc,
         action:`toggleCmdPalette();showPage('${p.page}');document.getElementById('${p.nav}')?.click()`});
     }
@@ -2685,7 +2693,9 @@ function fetchCmdResults(query) {
 
   DB.patients.forEach(p => {
     const name = `${p.first_name} ${p.last_name}`;
-    if (name.toLowerCase().includes(q) || (p.phone||'').includes(q)) {
+    const fn = p.first_name.toLowerCase();
+    const ln = p.last_name.toLowerCase();
+    if (name.toLowerCase().includes(normQ) || (p.phone||'').includes(normQ) || normQ.includes(fn) || normQ.includes(ln)) {
       results.push({icon:'🧑‍⚕️', title: name, desc:`Patient · ${p.phone||'—'}`,
         action:`toggleCmdPalette();toggleAiChat();sendQuickPrompt('${name}')`});
     }
@@ -2693,7 +2703,9 @@ function fetchCmdResults(query) {
 
   DB.doctors.forEach(d => {
     const name = `Dr. ${d.first_name} ${d.last_name}`;
-    if (name.toLowerCase().includes(q) || (d.specialization||'').toLowerCase().includes(q)) {
+    const fn = d.first_name.toLowerCase();
+    const ln = d.last_name.toLowerCase();
+    if (name.toLowerCase().includes(normQ) || (d.specialization||'').toLowerCase().includes(normQ) || normQ.includes(fn) || normQ.includes(ln)) {
       results.push({icon:'👨‍⚕️', title: name, desc:`Doctor · ${d.specialization||'—'}`,
         action:`toggleCmdPalette();toggleAiChat();sendQuickPrompt('${name}')`});
     }
@@ -3134,10 +3146,15 @@ function handleAiSend() {
 }
 
 function handleAiResponse(text) {
-  const q = text.toLowerCase();
+  const normQ = (typeof normalizeSearchQuery === 'function') ? normalizeSearchQuery(text) : text.toLowerCase();
   
-  // Patient search match
-  const patientMatch = DB.patients.find(p => q.includes(p.first_name.toLowerCase()) || q.includes(p.last_name.toLowerCase()));
+  // Patient search match (supports case-insensitive English & Amharic name transliteration e.g. "አልማዝ ተስፋዬ" -> "Almaz Tesfaye")
+  const patientMatch = DB.patients.find(p => {
+    const fn = p.first_name.toLowerCase();
+    const ln = p.last_name.toLowerCase();
+    const fullName = `${fn} ${ln}`;
+    return normQ.includes(fn) || normQ.includes(ln) || normQ.includes(fullName);
+  });
   if (patientMatch) {
     const p = patientMatch;
     const appts = DB.appointments.filter(a => a.patient_id === p.id);
