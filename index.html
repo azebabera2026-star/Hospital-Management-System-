@@ -2760,28 +2760,237 @@ function clearAiChat() {
   document.addEventListener('mouseup', () => isDragging = false);
 })();
 
-// Voice Input (Web Speech API)
+// ════ VOICE INPUT — Web Speech API ════
+// Dynamic language + hospital keyword fuzzy auto-correction
+
+/**
+ * Hospital keyword correction table.
+ * Maps common accent-driven mishearings → correct clinical term.
+ * Covers Ethiopian English (en-ET) accent patterns and common
+ * STT engine confusions for medical vocabulary.
+ */
+const HOSPITAL_CORRECTIONS = {
+  // Appointments
+  'appointment':   ['appointmen','apointment','appoitment','appointmant','opointment','a point man','a pointer man'],
+  'appointments':  ['appointmens','apointments','appoitments','appointmants'],
+  'schedule':      ['shedule','schedul','schedual','shedool','skejule'],
+  'reschedule':    ['re-schedule','reschejule','reshejule'],
+
+  // People
+  'patient':       ['paytient','patiant','payshent','pashent','patience','patients'],
+  'patients':      ['payshents','pashents','patiens','patiance'],
+  'doctor':        ['docter','doktor','docktor','dokter','doc tor'],
+  'doctors':       ['docters','doktors'],
+  'nurse':         ['nurs','nerse','narse'],
+  'pharmacist':    ['farmacist','farmisist','pharmasist'],
+
+  // Clinical Terms
+  'diagnosis':     ['diagonsis','dignosis','deagnosis','deignosis','diagnosys'],
+  'prescription':  ['prescripsion','presciption','preskription','prescribtion'],
+  'medication':    ['medecation','medicasion','medikation','medicaytion'],
+  'medications':   ['medecations','medicasions','medikations'],
+  'treatment':     ['treatmant','tretment','treatement','treament'],
+  'treatments':    ['treatmants','tretments'],
+  'admission':     ['admision','admittion','admmision','admition'],
+  'admissions':    ['admisions','admittions'],
+  'discharge':     ['discharg','dicharge','dissharge','distcharge'],
+  'surgery':       ['surjery','surgary','surjary','surgerie'],
+
+  // Financial
+  'billing':       ['biling','billin','biling','billeng'],
+  'invoice':       ['invoce','invoise','invioce','invoise'],
+  'invoices':      ['invoces','invoises'],
+  'payment':       ['payement','paiement','paymant'],
+  'revenue':       ['revenu','revnue','revinue'],
+
+  // Facility
+  'emergency':     ['emergancy','emergenci','emergensy','emergensy'],
+  'laboratory':    ['labratory','labartory','labrotory','labratory'],
+  'pharmacy':      ['farmacy','phramacy','farmasy'],
+  'radiology':     ['radiologi','rediology','radiologee'],
+  'cardiology':    ['cardiologi','cardiolgy','cardiologee'],
+  'neurology':     ['neurolgy','newrology','neurologi'],
+  'pediatric':     ['pedatric','pediactric','pediatrick'],
+  'orthopedic':    ['orthopaedic','orthopeedic','orthopadic'],
+
+  // General AI Commands
+  'remind':        ['remiend','reminnd','remaind'],
+  'reminder':      ['remiender','remainder'],
+  'report':        ['repot','repart','repord'],
+  'hospital':      ['hospitel','hosptal','hospittal','hospitall','hosiptal'],
+  'available':     ['avialable','avaialble','avalaible','availible'],
+  'status':        ['statuss','stauts','statuse','stetus'],
+  'list':          ['lis','lisst','lest'],
+  'show':          ['sho','shoe','showe'],
+  'find':          ['fined','fynd','fined'],
+  'search':        ['serch','surch','searh','saerch'],
+};
+
+/**
+ * Compute Levenshtein distance between two strings.
+ * Used for fuzzy matching when direct lookup fails.
+ */
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({length: m + 1}, (_, i) =>
+    Array.from({length: n + 1}, (_, j) => i === 0 ? j : j === 0 ? i : 0)
+  );
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i-1] === b[j-1]
+        ? dp[i-1][j-1]
+        : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    }
+  }
+  return dp[m][n];
+}
+
+/**
+ * Auto-correct a single word against the hospital keyword table.
+ * Threshold: Levenshtein distance ≤ 2 for words ≥ 5 chars, ≤ 1 for shorter.
+ */
+function correctHospitalWord(word) {
+  const lower = word.toLowerCase();
+  const threshold = lower.length >= 5 ? 2 : 1;
+
+  // 1. Direct alias match
+  for (const [correct, aliases] of Object.entries(HOSPITAL_CORRECTIONS)) {
+    if (lower === correct) return word; // already correct
+    if (aliases.includes(lower)) return word[0] === word[0].toUpperCase()
+      ? correct.charAt(0).toUpperCase() + correct.slice(1) : correct;
+  }
+
+  // 2. Fuzzy Levenshtein match against correction table keys
+  let bestMatch = null, bestDist = Infinity;
+  for (const correct of Object.keys(HOSPITAL_CORRECTIONS)) {
+    const dist = levenshtein(lower, correct);
+    if (dist <= threshold && dist < bestDist) {
+      bestDist = dist;
+      bestMatch = correct;
+    }
+  }
+  if (bestMatch) {
+    return word[0] === word[0].toUpperCase()
+      ? bestMatch.charAt(0).toUpperCase() + bestMatch.slice(1) : bestMatch;
+  }
+
+  // 3. No correction — return original
+  return word;
+}
+
+/**
+ * Run auto-correction over a full transcript phrase.
+ * Each word is corrected independently; punctuation preserved.
+ */
+function autoCorrectTranscript(transcript) {
+  return transcript
+    .split(/(\s+)/)
+    .map(token => /\s+/.test(token) ? token : correctHospitalWord(token))
+    .join('');
+}
+
+/**
+ * Get the BCP-47 speech recognition language tag based on current UI language.
+ * en-ET is the closest available code for Ethiopian-accented English on Chrome;
+ * falls back to en-US when unavailable.
+ */
+function getSpeechLang() {
+  if (typeof currentLang === 'undefined') return 'en-US';
+  if (currentLang === 'am') return 'am-ET';  // Amharic input
+  // Use en-ET to better handle Ethiopian-accented English phonemes
+  return 'en-ET';
+}
+
 function toggleVoiceInput() {
   const micBtn = document.getElementById('ai-mic-btn');
-  const input = document.getElementById('ai-chat-input');
-  if (isListening) { speechRec?.stop(); return; }
+  const input  = document.getElementById('ai-chat-input');
+
+  // Stop if already listening
+  if (isListening) {
+    speechRec?.stop();
+    isListening = false;
+    micBtn?.classList.remove('listening');
+    if (input) input.placeholder = 'Ask AI Assistant or type patient name...';
+    return;
+  }
+
   const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) { showToast('Speech recognition is not supported in this browser.', 'error'); return; }
+  if (!SpeechRec) {
+    showToast('⚠️ Speech recognition is not supported in this browser. Please use Chrome or Edge.', 'error');
+    return;
+  }
+
   speechRec = new SpeechRec();
-  speechRec.continuous = false;
-  speechRec.interimResults = true;
-  speechRec.onstart = () => { isListening = true; micBtn?.classList.add('listening'); if(input) input.placeholder = "Listening..."; };
+  speechRec.lang            = getSpeechLang();  // ← Dynamic language
+  speechRec.continuous      = false;
+  speechRec.interimResults  = true;
+  speechRec.maxAlternatives = 3;  // Get top-3 alternatives for better correction
+
+  speechRec.onstart = () => {
+    isListening = true;
+    micBtn?.classList.add('listening');
+    if (input) input.placeholder = `🎤 Listening (${speechRec.lang})...`;
+    showToast(`🎤 Listening in ${speechRec.lang === 'am-ET' ? 'አማርኛ' : 'English'}...`, 'info');
+  };
+
   speechRec.onresult = (e) => {
-    let result = '';
-    for (let i = e.resultIndex; i < e.results.length; ++i) result += e.results[i][0].transcript;
-    if (input) input.value = result;
+    let interimText = '';
+    let finalText   = '';
+
+    for (let i = e.resultIndex; i < e.results.length; ++i) {
+      const result = e.results[i];
+      if (result.isFinal) {
+        // Use best alternative among top-3 after correction
+        let bestCorrected = autoCorrectTranscript(result[0].transcript);
+        // Check if any alternative corrects better (fewer total levenshtein distance)
+        for (let k = 1; k < Math.min(result.length, 3); k++) {
+          const alt = autoCorrectTranscript(result[k].transcript);
+          if (alt.length > bestCorrected.length * 0.8) bestCorrected = alt;
+        }
+        finalText += bestCorrected;
+      } else {
+        interimText += result[0].transcript;
+      }
+    }
+
+    // Show interim text while speaking
+    if (input) input.value = finalText || interimText;
   };
-  speechRec.onerror = () => { isListening = false; micBtn?.classList.remove('listening'); if(input) input.placeholder = "Ask AI Assistant..."; };
+
+  speechRec.onerror = (e) => {
+    isListening = false;
+    micBtn?.classList.remove('listening');
+    if (input) input.placeholder = 'Ask AI Assistant or type patient name...';
+    const msgs = {
+      'no-speech':         '🎤 No speech detected. Please try again.',
+      'audio-capture':     '🎤 Microphone not found or permission denied.',
+      'not-allowed':       '🎤 Microphone access blocked. Check browser permissions.',
+      'language-not-supported': `⚠️ Language ${speechRec.lang} not supported. Falling back to en-US.`,
+      'network':           '⚠️ Network error during speech recognition.',
+    };
+    showToast(msgs[e.error] || `⚠️ Speech error: ${e.error}`, 'error');
+
+    // Automatic fallback: if en-ET not supported, retry with en-US
+    if (e.error === 'language-not-supported' && speechRec.lang !== 'en-US') {
+      setTimeout(() => {
+        speechRec.lang = 'en-US';
+        speechRec.start();
+      }, 500);
+    }
+  };
+
   speechRec.onend = () => {
-    isListening = false; micBtn?.classList.remove('listening');
-    if (input) input.placeholder = "Ask AI Assistant...";
-    if (input && input.value.trim()) handleAiSend();
+    isListening = false;
+    micBtn?.classList.remove('listening');
+    if (input) input.placeholder = 'Ask AI Assistant or type patient name...';
+    const val = input?.value?.trim();
+    if (val) {
+      // Final auto-correction pass on the complete utterance
+      input.value = autoCorrectTranscript(val);
+      handleAiSend();
+    }
   };
+
   speechRec.start();
 }
 
