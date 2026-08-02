@@ -1027,13 +1027,22 @@ input,select,textarea{font-family:inherit}
               </div>
 
               <!-- Row 3: Assessment & Routing -->
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
                 <div class="form-group" style="margin:0;grid-column:1/-1"><label>Chief Complaint / Reason for Visit</label><input class="form-input" type="text" id="rec-cc" placeholder="e.g. Fever, chest pressure, routine checkup..."></div>
                 <div class="form-group" style="margin:0"><label>Triage Priority</label><select class="form-select" id="rec-priority"><option value="routine">Routine</option><option value="urgent">Urgent</option><option value="emergency">Emergency</option></select></div>
                 <div class="form-group" style="margin:0"><label>Route to Doctor *</label><select class="form-select" id="rec-doc" required></select></div>
               </div>
 
-              <button class="btn btn-teal" type="submit" style="width:100%;padding:12px;font-size:14px;font-weight:700">🪪 Issue Card, Register &amp; Route Patient</button>
+              <!-- Row 4: Card Registration Fee & Payment Collection -->
+              <div style="margin-top:14px;padding:14px;background:rgba(0,210,170,.04);border:1px solid rgba(0,210,170,.2);border-radius:10px;margin-bottom:16px">
+                <div style="font-size:12px;font-weight:700;color:var(--a);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">💳 Card Registration Fee &amp; Payment</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                  <div class="form-group" style="margin:0"><label>Card Fee (ETB)</label><input class="form-input" type="number" id="rec-fee" value="150" min="0" step="10"></div>
+                  <div class="form-group" style="margin:0"><label>Payment Method</label><select class="form-select" id="rec-pm"><option value="Cash">Cash</option><option value="Telebirr">Telebirr</option><option value="CBE Birr">CBE Birr</option></select></div>
+                </div>
+              </div>
+
+              <button class="btn btn-teal" type="submit" style="width:100%;padding:12px;font-size:14px;font-weight:700">🪪 Issue Card, Collect Fee &amp; Route Patient</button>
             </form>
           </div>
 
@@ -1447,7 +1456,7 @@ input,select,textarea{font-family:inherit}
     <div class="modal-hdr"><div class="modal-title">Edit Invoice #<span id="inv-edit-id"></span></div><button class="modal-close" onclick="closeModal('m-invoice-edit')">✕</button></div>
     <div class="form-group"><label>Patient</label><select class="form-select" id="inv-e-pat"></select></div>
     <div class="form-group"><label>Status</label><select class="form-select" id="inv-e-st"><option value="unpaid">Unpaid</option><option value="paid">Paid</option><option value="partially_paid">Partially Paid</option><option value="cancelled">Cancelled</option></select></div>
-    <div class="form-group"><label>Amount Paid (৳)</label><input class="form-input" type="number" id="inv-e-paid" placeholder="0.00" min="0" step="0.01"></div>
+    <div class="form-group"><label>Amount Paid (ETB )</label><input class="form-input" type="number" id="inv-e-paid" placeholder="0.00" min="0" step="0.01"></div>
     <div class="form-group"><label>Due Date (Optional)</label><input class="form-input" type="date" id="inv-e-due"></div>
     <div class="form-group"><label>Notes</label><input class="form-input" type="text" id="inv-e-nt" placeholder="Notes..."></div>
     <div style="display:flex;gap:12px;margin-top:8px">
@@ -2382,9 +2391,9 @@ function renderBilling(f=''){
   const unpaidCnt=allInv.filter(i=>i.status==='unpaid').length;
   document.getElementById('billing-summary').innerHTML=`
     <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(0,210,170,.12);color:var(--a)">🧾</div></div><div class="stat-val">${allInv.length}</div><div class="stat-label">Total Invoices</div></div>
-    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10b981">💰</div></div><div class="stat-val" style="font-size:22px">৳${totalRev.toLocaleString()}</div><div class="stat-label">Total Billed</div></div>
-    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(99,102,241,.12);color:var(--a2)">✅</div></div><div class="stat-val" style="font-size:22px">৳${totalPaid.toLocaleString()}</div><div class="stat-label">Amount Collected</div></div>
-    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(244,63,94,.12);color:var(--a4)">⏳</div></div><div class="stat-val" style="font-size:22px">৳${outstanding.toLocaleString()}</div><div class="stat-label">Outstanding</div></div>
+    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(16,185,129,.12);color:#10b981">💰</div></div><div class="stat-val" style="font-size:22px">ETB ${totalRev.toLocaleString()}</div><div class="stat-label">Total Billed</div></div>
+    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(99,102,241,.12);color:var(--a2)">✅</div></div><div class="stat-val" style="font-size:22px">ETB ${totalPaid.toLocaleString()}</div><div class="stat-label">Amount Collected</div></div>
+    <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(244,63,94,.12);color:var(--a4)">⏳</div></div><div class="stat-val" style="font-size:22px">ETB ${outstanding.toLocaleString()}</div><div class="stat-label">Outstanding</div></div>
     <div class="stat-card"><div class="stat-hdr"><div class="stat-icon" style="background:rgba(245,158,11,.12);color:var(--a3)">🔔</div></div><div class="stat-val">${unpaidCnt}</div><div class="stat-label">Unpaid Invoices</div></div>
   `;
   // Table
@@ -2399,8 +2408,8 @@ function renderBilling(f=''){
         <td style="white-space:nowrap;color:var(--tx2)">${fDate(inv.issued_at)}</td>
         <td style="white-space:nowrap;color:${inv.due_date&&new Date(inv.due_date)<new Date()&&inv.status==='unpaid'?'#f43f5e':'var(--tx3)'}">${inv.due_date?fDate(inv.due_date):'—'}</td>
         <td style="min-width:150px">${itemsHtml||'<span style="color:var(--tx3);font-size:12px">No items</span>'}</td>
-        <td style="color:var(--tx);font-weight:700">৳${total.toLocaleString()}</td>
-        <td style="color:#10b981;font-weight:600">৳${inv.paid_amount.toLocaleString()}</td>
+        <td style="color:var(--tx);font-weight:700">ETB ${total.toLocaleString()}</td>
+        <td style="color:#10b981;font-weight:600">ETB ${inv.paid_amount.toLocaleString()}</td>
         <td>${fBilStatus(inv.status)}</td>
         <td>${actBtns(`editInvoice(${inv.id})`,`delInvoice(${inv.id})`)}</td>
       </tr>`;
@@ -2499,6 +2508,8 @@ function submitReceptionTriage(e) {
   const docId = parseInt(document.getElementById('rec-doc').value);
   const priority = document.getElementById('rec-priority').value;
   const cc = document.getElementById('rec-cc').value.trim() || 'General Consultation';
+  const cardFee = parseFloat(document.getElementById('rec-fee').value) || 0;
+  const payMethod = document.getElementById('rec-pm').value || 'Cash';
 
   const newPat = {
     id: nxt.p++,
@@ -2536,16 +2547,40 @@ function submitReceptionTriage(e) {
     });
   }
 
+  // Auto-create Billing Invoice for Card Fee
+  if (cardFee > 0) {
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const invId = nxt.inv++;
+    DB.invoices.push({
+      id: invId,
+      patient_id: newPat.id,
+      issue_date: todayStr,
+      due_date: todayStr,
+      status: 'paid',
+      paid_amount: cardFee,
+      notes: `Card Registration & Triage Fee (${payMethod})`
+    });
+    DB.invoice_items.push({
+      id: nxt.ii++,
+      invoice_id: invId,
+      description: `Card Registration & Triage Fee (${payMethod})`,
+      quantity: 1,
+      unit_price: cardFee
+    });
+  }
+
   ['rec-fn','rec-ln','rec-dob','rec-ph','rec-addr','rec-bp','rec-spo2','rec-temp','rec-wt','rec-ht','rec-hr','rec-cc'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  document.getElementById('rec-fee').value = '150';
 
-  showToast(`🪪 Registered ${fn} ${ln} (${mrn}) & routed to ${gDoc(docId)}`, 'success');
+  showToast(`🪪 Registered ${fn} ${ln} (${mrn}) · Card Fee: ETB ${cardFee} (${payMethod}) & routed to ${gDoc(docId)}`, 'success');
 
   renderPatients();
   renderAppointments();
   renderReceptionQueue();
+  renderBilling();
   renderDashboardStats();
   populateSelects();
 }
