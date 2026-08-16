@@ -79,9 +79,8 @@ While the system is functional, there are several areas for improvement:
 
 ## 👤 Author
 
-* **Md. Mahedi Zaman Zaber**
-* GitHub: [@zaber-dev](https://github.com/zaber-dev)
-
+* **Azeb Abera**
+* GitHub:GitHub: @azebabera2026-star
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
