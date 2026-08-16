@@ -666,6 +666,127 @@ input,select,textarea{font-family:inherit}
 .pt-tab:hover { color: var(--tx); }
 .pt-tab.active { color: var(--a); border-bottom-color: var(--a); }
 
+/* ── AI CLINICAL DECISION SUPPORT CARDS ── */
+.ai-cds-card {
+  background: linear-gradient(135deg, rgba(0,210,170,.08) 0%, rgba(99,102,241,.08) 100%);
+  border: 1px solid rgba(0,210,170,.25);
+  border-radius: 14px; margin: 8px 0; overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,210,170,.08);
+  animation: fadeUp .35s ease;
+}
+.ai-cds-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 16px;
+  background: linear-gradient(90deg, rgba(0,210,170,.15), rgba(99,102,241,.1));
+  border-bottom: 1px solid rgba(0,210,170,.18);
+}
+.ai-cds-header-title {
+  font-size: 13px; font-weight: 800; color: var(--a);
+  display: flex; align-items: center; gap: 7px; letter-spacing: .2px;
+}
+.ai-cds-header-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 10px;
+  background: rgba(0,210,170,.2); color: var(--a); border: 1px solid rgba(0,210,170,.3);
+}
+.ai-cds-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+.ai-cds-section-label {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .8px;
+  color: var(--tx3); margin-bottom: 7px;
+}
+.ai-cds-vitals-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+}
+.ai-cds-vital-item {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 10px; padding: 8px 10px; text-align: center;
+}
+.ai-cds-vital-val {
+  font-size: 14px; font-weight: 800; color: var(--a); line-height: 1.2;
+}
+.ai-cds-vital-lbl {
+  font-size: 10px; color: var(--tx3); margin-top: 3px;
+}
+.ai-cds-profile-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.ai-cds-profile-item {
+  background: rgba(255,255,255,.03); border-radius: 9px; padding: 9px 12px;
+  border-left: 3px solid var(--a2);
+}
+.ai-cds-profile-item.primary { border-left-color: var(--a); }
+.ai-cds-profile-item.danger  { border-left-color: var(--a4); }
+.ai-cds-profile-item.amber   { border-left-color: var(--a3); }
+.ai-cds-profile-label { font-size: 10px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: .5px; }
+.ai-cds-profile-value { font-size: 12px; color: var(--tx); margin-top: 3px; font-weight: 500; line-height: 1.4; }
+.ai-cds-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: linear-gradient(90deg, rgba(99,102,241,.1), rgba(0,210,170,.06));
+  border: 1px solid rgba(99,102,241,.2); border-radius: 10px; padding: 11px 14px;
+}
+.ai-cds-note-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.ai-cds-note-text { font-size: 12px; color: var(--tx); line-height: 1.6; font-style: italic; }
+.ai-cds-note-text strong { color: var(--a2); font-style: normal; }
+
+/* AI Clinical Insights card inside Patient Details modal */
+.ai-insights-card {
+  background: linear-gradient(135deg, rgba(0,210,170,.07) 0%, rgba(99,102,241,.07) 100%);
+  border: 1px solid rgba(0,210,170,.28);
+  border-radius: 14px; overflow: hidden; margin-bottom: 20px;
+  box-shadow: 0 4px 28px rgba(0,210,170,.1);
+}
+.ai-insights-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: linear-gradient(90deg, rgba(0,210,170,.18), rgba(99,102,241,.12));
+  border-bottom: 1px solid rgba(0,210,170,.2);
+}
+.ai-insights-header-left {
+  display: flex; align-items: center; gap: 10px;
+}
+.ai-insights-header-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--a), var(--a2));
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.ai-insights-header-title { font-size: 14px; font-weight: 800; color: var(--tx); }
+.ai-insights-header-sub   { font-size: 11px; color: var(--tx2); margin-top: 1px; }
+.ai-insights-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 10px;
+  background: rgba(0,210,170,.2); color: var(--a);
+  border: 1px solid rgba(0,210,170,.3); white-space: nowrap;
+}
+.ai-insights-body { padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.ai-insights-vitals {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+}
+.ai-insights-vital {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 10px; padding: 10px; text-align: center;
+  transition: border-color .2s;
+}
+.ai-insights-vital:hover { border-color: rgba(0,210,170,.3); }
+.ai-insights-vital-val { font-size: 15px; font-weight: 800; line-height: 1.2; }
+.ai-insights-vital-lbl { font-size: 10px; color: var(--tx3); margin-top: 4px; }
+.ai-insights-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+}
+.ai-insights-item {
+  background: rgba(255,255,255,.03); border-radius: 10px; padding: 10px 13px;
+  border-left: 3px solid var(--a);
+}
+.ai-insights-item.purple { border-left-color: var(--a2); }
+.ai-insights-item.amber  { border-left-color: var(--a3); }
+.ai-insights-item-label  { font-size: 10px; font-weight: 700; color: var(--tx3); text-transform: uppercase; letter-spacing: .5px; }
+.ai-insights-item-value  { font-size: 12px; color: var(--tx); margin-top: 4px; font-weight: 500; line-height: 1.45; }
+.ai-insights-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: linear-gradient(90deg, rgba(99,102,241,.12), rgba(0,210,170,.06));
+  border: 1px solid rgba(99,102,241,.25); border-radius: 10px; padding: 12px 16px;
+}
+.ai-insights-note-icon { font-size: 20px; flex-shrink: 0; }
+.ai-insights-note-body  { font-size: 12.5px; color: var(--tx); line-height: 1.65; }
+.ai-insights-note-body strong { color: var(--a2); }
+
 /* ── PRINT & PDF STYLES ── */
 @media print {
   .sb, .hdr, #ai-chat-launcher, #ai-chat-widget, #cmd-palette-ov, .psearch, button { display: none !important; }
@@ -1011,7 +1132,7 @@ input,select,textarea{font-family:inherit}
               <span>📈 Weekly Hospital Executive Report</span>
               <span class="badge bg" style="font-size:11px">Live Data</span>
             </div>
-            <div style="font-size:13px;color:var(--tx2);margin-top:4px">📅 Report Period: <strong>Feb 10, 2025 – Feb 16, 2025</strong> · Nucleus HMS Operations</div>
+            <div style="font-size:13px;color:var(--tx2);margin-top:4px">📅 Report Period: <strong id="report-period-label">Loading...</strong> · Nucleus HMS Operations</div>
           </div>
           <button class="btn btn-teal" onclick="exportWeeklyReport()" style="padding:10px 20px;font-weight:700">
             🖨️ Export Report / Print PDF
@@ -1809,6 +1930,8 @@ input,select,textarea{font-family:inherit}
         <button onclick="sendQuickPrompt('Upcoming Appointments')">📅 Upcoming Appointments</button>
         <button onclick="sendQuickPrompt('Draft Reminders')">📱 Draft Reminders</button>
         <button onclick="sendQuickPrompt('Hospital Status')">🏥 Hospital Status</button>
+        <button onclick="sendQuickPrompt('Summarize Abebe Kebede vitals and symptoms')">🏥 Summarize Patient</button>
+        <button onclick="sendQuickPrompt('Schedule appointment for Abebe Kebede with Dr. Dawit Solomon tomorrow at 10:00 AM')">📅 Schedule Appt</button>
       </div>
       <div class="ai-input-wrap">
         <input type="text" id="ai-chat-input" placeholder="Ask AI Assistant or type patient name..." onkeydown="if(event.key==='Enter')handleAiSend()">
@@ -1898,7 +2021,18 @@ const DB = {
      referral:'Referred to psychiatry for anxiety evaluation; Cardiology follow-up in 4 weeks',
      allergies:'Ibuprofen (urticaria), Penicillin V',
      medical_history:'No prior cardiac history; Anxiety diagnosed 2023; Occasional panic attacks; Non-smoker',
-     emergency_contact_name:'Tadesse Worku (Brother)',emergency_contact_phone:'+251-913-999006',status:'active'}
+     emergency_contact_name:'Tadesse Worku (Brother)',emergency_contact_phone:'+251-913-999006',status:'active'},
+    {id:7,mrn:'PAT-007',first_name:'Azeb',last_name:'Abera',gender:'female',birthdate:'1992-06-18',phone:'+251916403938',address:'Bole Medhanialem, Addis Ababa',
+     weight_kg:65,height_cm:168,blood_pressure:'120/80',temperature_c:36.7,heart_rate_bpm:76,spo2_pct:98,
+     chief_complaint:'Routine check-up and follow-up consultation',
+     symptoms:'Mild fatigue',
+     diagnosis:'General wellness evaluation',
+     investigations:'CBC (WBC 6.5, RBC 4.5), BMP normal',
+     imaging:'None indicated',
+     referral:'General consultation follow-up',
+     allergies:'None known',
+     medical_history:'No prior chronic illness; Non-smoker',
+     emergency_contact_name:'Abera Tassew (Father)',emergency_contact_phone:'+251911000007',status:'active'}
   ],
   doctors:[
     {id:1,first_name:'Dawit',last_name:'Solomon',email:'dawit.solomon@nucleushospital.et',phone:'+251-911-500101',specialization:'Interventional Cardiology',department_id:1},
@@ -1911,7 +2045,8 @@ const DB = {
     {id:2,patient_id:2,doctor_id:4,appointment_date:'2025-02-18T11:30',status:'scheduled',notes:'Knee pain evaluation'},
     {id:3,patient_id:3,doctor_id:3,appointment_date:'2025-03-05T09:00',status:'completed',notes:'Well child visit'},
     {id:4,patient_id:4,doctor_id:2,appointment_date:'2025-04-01T15:00',status:'cancelled',notes:'Patient requested reschedule'},
-    {id:5,patient_id:6,doctor_id:1,appointment_date:'2025-05-12T13:45',status:'scheduled',notes:'Chest pain assessment'}
+    {id:5,patient_id:6,doctor_id:1,appointment_date:'2025-05-12T13:45',status:'scheduled',notes:'Chest pain assessment'},
+    {id:6,patient_id:7,doctor_id:1,appointment_date:'2026-08-10T10:00',status:'scheduled',notes:'General follow-up consultation'}
   ],
   treatments:[
     {id:1,patient_id:1,doctor_id:1,appointment_id:1,diagnosis:'Essential hypertension',treatment_date:'2025-02-15'},
@@ -1989,9 +2124,47 @@ const CREDS={
 };
 
 let currentUser=null, apptStatusF='all', roomF='all', billingStatusF='all';
-let nxt={p:7,d:5,a:6,t:6,u:7,adm:4,dept:6,med:11,inv:4,invItem:6};
+let nxt={p:8,d:5,a:7,t:6,u:7,adm:4,dept:6,med:11,inv:4,invItem:6};
 // Edit state — null = Add mode, number = Edit mode (holds the ID being edited)
 let editState={patient:null,doctor:null,appt:null,treatment:null,admission:null,user:null,dept:null,med:null,invoice:null};
+
+// ════ SMS GATEWAY CONFIGURATION ════
+// AfroMessage API key (Bearer token from https://afromessage.com)
+// This is loaded here so the app can send SMS directly from the browser
+// without requiring a PHP backend.
+const NUCLEUS_SMS_CONFIG = {
+  afroApiKey: 'eyJhbGciOiJIUzI1NiJ9.eyJpZGVudGlmaWVyIjoib1ZTczkzQWVOMzZBQnY5UFBDcFkzUzhiQ09YaWRTbnciLCJleHAiOjE5NDQwODI5MzIsImlhdCI6MTc4NjMxNjUzMiwianRpIjoiMTIxZmQ1ODAtZGMzNy00NjI0LTg4ZGQtODA3YzcxMWYyYTdkIn0.2mMwOU76cMqSamb7qomnTSYSdlr0QqmbIJdvs8u1olM',
+  afroEndpoint: 'https://api.afromessage.com/api/send',
+  senderId: '',           // Optional: leave empty to use AfroMessage account default
+};
+
+// ════ DYNAMIC DATE UTILITIES ════
+/**
+ * Returns today's date as a local YYYY-MM-DD string (no UTC shift).
+ * Used to pre-fill <input type="date"> fields.
+ */
+function todayISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+/**
+ * Returns now as a local YYYY-MM-DDTHH:MM string (no UTC shift).
+ * Used to pre-fill <input type="datetime-local"> fields.
+ */
+function nowDateTimeLocal() {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const hm  = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+  return `${ymd}T${hm}`;
+}
+
+/**
+ * Returns a readable "Mon DD, YYYY" string for a Date object.
+ */
+function readableDate(d) {
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 
 // ════ AUTH ════
 function selectRolePreset(u,p,r,el){
@@ -2134,6 +2307,19 @@ function initApp(){
   // Populate doctor dept select dynamically from DB
   refreshDoctorDeptSelect();
   if (typeof scanUpcomingAppointments === 'function') scanUpcomingAppointments(false);
+
+  // ── Inject dynamic current-week report period label ──
+  const lbl = document.getElementById('report-period-label');
+  if (lbl) {
+    const now = new Date();
+    const dow = now.getDay(); // 0=Sun, 1=Mon...
+    const diffToMon = dow === 0 ? -6 : 1 - dow;  // how many days back to Monday
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMon);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    lbl.textContent = `${readableDate(monday)} – ${readableDate(sunday)}`;
+  }
 }
 function refreshDoctorDeptSelect(){
   const sel=document.getElementById('d-dept');
@@ -2212,7 +2398,108 @@ function viewPatient(id) {
   const appts = DB.appointments.filter(a => a.patient_id === p.id);
   const treats = DB.treatments.filter(t => t.patient_id === p.id);
 
+  // ── Build AI clinical note (rule-based decision support) for modal ──
+  function buildModalClinicalNote(p) {
+    const diag = (p.diagnosis || '').toLowerCase();
+    const bp   = p.blood_pressure || '';
+    const spo2 = p.spo2_pct || 100;
+    const hr   = p.heart_rate_bpm || 0;
+    const temp = p.temperature_c || 37;
+    const bpHigh  = bp && (parseInt(bp) >= 140 || parseInt(bp.split('/')[1] || 0) >= 90);
+    const spo2Low = spo2 < 95;
+    const hrHigh  = hr > 100;
+    const fever   = temp >= 38;
+    if (diag.includes('hypertension') || bpHigh)
+      return `Patient presents with elevated BP (${bp || 'elevated'}) and hypertensive diagnosis — <strong>antihypertensive review and cardiology follow-up recommended</strong>.`;
+    if (diag.includes('angina') || diag.includes('chest'))
+      return `Chest pain presentation requires <strong>urgent cardiac workup</strong> (ECG, troponin series) — cardiology referral should be expedited.`;
+    if (diag.includes('migraine') || diag.includes('headache'))
+      return `Recurrent migraine with aura confirmed — evaluate triggers, <strong>consider prophylactic therapy</strong> and neurology co-management.`;
+    if (diag.includes('meniscal') || diag.includes('knee'))
+      return `Meniscal tear with limited ROM — <strong>physiotherapy initiated</strong>; surgical review if conservative management fails within 4–6 weeks.`;
+    if (diag.includes('anxiety') || diag.includes('panic'))
+      return `Cardiac causes largely excluded — <strong>psychiatric evaluation for anxiety/panic disorder is clinically indicated</strong>.`;
+    if (spo2Low)
+      return `SpO₂ at ${spo2}% — <strong>supplemental oxygen assessment warranted</strong>; urgent pulmonary evaluation recommended.`;
+    if (fever)
+      return `Febrile at ${temp} °C — <strong>monitor for infection</strong>; CBC and culture results should guide antibiotic therapy.`;
+    return `Patient stable with diagnosis of <strong>${p.diagnosis || 'under evaluation'}</strong> — continue current management and reassess at next follow-up.`;
+  }
+
+  const modalAiNote = buildModalClinicalNote(p);
+  const labSt = p.investigations ? '✅ Results Available' : '⏳ None ordered';
+  const imgSt = p.imaging && p.imaging !== 'None indicated' ? '✅ Available' : '⏳ None ordered';
+
   document.getElementById('m-pview-body').innerHTML = `
+    <!-- ══ AI Clinical Insights Card ══ -->
+    <div class="ai-insights-card">
+      <div class="ai-insights-header">
+        <div class="ai-insights-header-left">
+          <div class="ai-insights-header-icon">🤖</div>
+          <div>
+            <div class="ai-insights-header-title">AI Clinical Insights</div>
+            <div class="ai-insights-header-sub">Nucleus Clinical Decision Support · ${p.first_name} ${p.last_name}</div>
+          </div>
+        </div>
+        <span class="ai-insights-badge">🏥 Live Analysis</span>
+      </div>
+      <div class="ai-insights-body">
+
+        <!-- Vitals row -->
+        <div>
+          <div class="ai-cds-section-label">📊 Vitals Overview</div>
+          <div class="ai-insights-vitals">
+            <div class="ai-insights-vital">
+              <div class="ai-insights-vital-val" style="color:var(--a4)">${p.blood_pressure || '—'}</div>
+              <div class="ai-insights-vital-lbl">Blood Pressure</div>
+            </div>
+            <div class="ai-insights-vital">
+              <div class="ai-insights-vital-val" style="color:#10b981">${p.spo2_pct ? p.spo2_pct + '%' : '—'}</div>
+              <div class="ai-insights-vital-lbl">SpO₂</div>
+            </div>
+            <div class="ai-insights-vital">
+              <div class="ai-insights-vital-val" style="color:var(--a2)">${p.heart_rate_bpm ? p.heart_rate_bpm + ' bpm' : '—'}</div>
+              <div class="ai-insights-vital-lbl">Heart Rate</div>
+            </div>
+            <div class="ai-insights-vital">
+              <div class="ai-insights-vital-val" style="color:var(--a3)">${p.temperature_c ? p.temperature_c + ' °C' : '—'}</div>
+              <div class="ai-insights-vital-lbl">Temperature</div>
+            </div>
+            <div class="ai-insights-vital">
+              <div class="ai-insights-vital-val" style="color:var(--tx)">${p.weight_kg ? p.weight_kg + ' kg' : '—'}</div>
+              <div class="ai-insights-vital-lbl">Weight</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Symptoms / Diagnosis / Labs+Imaging -->
+        <div>
+          <div class="ai-cds-section-label">🩺 Clinical Profile</div>
+          <div class="ai-insights-row">
+            <div class="ai-insights-item">
+              <div class="ai-insights-item-label">Symptoms</div>
+              <div class="ai-insights-item-value">${p.symptoms || '—'}</div>
+            </div>
+            <div class="ai-insights-item purple">
+              <div class="ai-insights-item-label">Diagnosis</div>
+              <div class="ai-insights-item-value" style="color:var(--a);font-weight:700">${p.diagnosis || 'Pending evaluation'}</div>
+            </div>
+            <div class="ai-insights-item amber">
+              <div class="ai-insights-item-label">🧪 Labs · 🖼 Imaging</div>
+              <div class="ai-insights-item-value">${labSt}<br>${imgSt}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Note -->
+        <div class="ai-insights-note">
+          <div class="ai-insights-note-icon">🤖</div>
+          <div class="ai-insights-note-body"><strong>AI Clinical Note:</strong> ${modalAiNote}</div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Vitals Summary Banner -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:20px;padding:16px;background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:12px">
       <div><div style="font-size:11px;color:var(--tx3)">Blood Pressure</div><div style="font-size:15px;font-weight:700;color:var(--a)">${p.blood_pressure || '—'}</div></div>
@@ -2269,55 +2556,92 @@ function viewPatient(id) {
 
 function openAddPatient() {
   editState.patient = null;
+
+  // Set modal title & button first (always safe — these are in the static DOM)
+  const titleEl = document.getElementById('m-patient-title');
+  const btnEl   = document.getElementById('m-patient-btn');
+  if (titleEl) titleEl.textContent = 'Add New Patient';
+  if (btnEl)   btnEl.textContent   = 'Add Patient';
+
+  // Open the modal first so all tab panels are in the DOM before we access them
+  openModal('m-patient');
+  switchPatientTab('personal', document.getElementById('ptab-personal'));
+
+  // Now safely populate / clear all fields (null-guarded)
   const nextMrn = 'PAT-' + String(nxt.p).padStart(3, '0');
-  document.getElementById('p-mrn').value = nextMrn;
-  document.getElementById('m-patient-title').textContent = 'Add New Patient';
-  document.getElementById('m-patient-btn').textContent = 'Add Patient';
-  ['p-fn','p-ln','p-dob','p-ph','p-addr','p-wt','p-ht','p-bp','p-temp','p-hr','p-spo2','p-cc','p-sym','p-diag','p-inv','p-img','p-ref','p-allergy','p-hx','p-ec-name','p-ec-phone'].forEach(id => {
+  const mrnEl = document.getElementById('p-mrn');
+  if (mrnEl) mrnEl.value = nextMrn;
+
+  const gEl = document.getElementById('p-g');
+  if (gEl) gEl.value = 'male';
+
+  const stEl = document.getElementById('p-status');
+  if (stEl) stEl.value = 'active';
+
+  ['p-fn','p-ln','p-dob','p-ph','p-addr','p-wt','p-ht','p-bp','p-temp','p-hr',
+   'p-spo2','p-cc','p-sym','p-diag','p-inv','p-img','p-ref','p-allergy','p-hx',
+   'p-ec-name','p-ec-phone'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
-  document.getElementById('p-g').value = 'male';
-  document.getElementById('p-status').value = 'active';
-  switchPatientTab('personal', document.getElementById('ptab-personal'));
-  openModal('m-patient');
 }
 
 function editPatient(id){
-  const p=DB.patients.find(x=>x.id===id);if(!p)return;
-  editState.patient=id;
-  document.getElementById('p-mrn').value = p.mrn || ('PAT-' + String(p.id).padStart(3, '0'));
-  document.getElementById('p-fn').value = p.first_name || '';
-  document.getElementById('p-ln').value = p.last_name || '';
-  document.getElementById('p-g').value = p.gender || 'male';
-  document.getElementById('p-dob').value = p.birthdate || '';
-  document.getElementById('p-ph').value = p.phone || '';
-  document.getElementById('p-addr').value = p.address || '';
-  document.getElementById('p-status').value = p.status || 'active';
+  const p = DB.patients.find(x => x.id === id);
+  if (!p) return;
+  editState.patient = id;
 
-  document.getElementById('p-wt').value = p.weight_kg || '';
-  document.getElementById('p-ht').value = p.height_cm || '';
-  document.getElementById('p-bp').value = p.blood_pressure || '';
-  document.getElementById('p-temp').value = p.temperature_c || '';
-  document.getElementById('p-hr').value = p.heart_rate_bpm || '';
-  document.getElementById('p-spo2').value = p.spo2_pct || '';
-
-  document.getElementById('p-cc').value = p.chief_complaint || '';
-  document.getElementById('p-sym').value = p.symptoms || '';
-  document.getElementById('p-diag').value = p.diagnosis || '';
-  document.getElementById('p-inv').value = p.investigations || '';
-  document.getElementById('p-img').value = p.imaging || '';
-  document.getElementById('p-ref').value = p.referral || '';
-  document.getElementById('p-allergy').value = p.allergies || '';
-  document.getElementById('p-hx').value = p.medical_history || '';
-
-  document.getElementById('p-ec-name').value = p.emergency_contact_name || '';
-  document.getElementById('p-ec-phone').value = p.emergency_contact_phone || '';
-
-  document.getElementById('m-patient-title').textContent = 'Edit Patient Record';
-  document.getElementById('m-patient-btn').textContent = 'Save Changes';
-  switchPatientTab('personal', document.getElementById('ptab-personal'));
+  // ── Open modal FIRST so all tab panels exist in the DOM ──
+  // This guarantees getElementById will find the inputs before we try to write to them.
   openModal('m-patient');
+  switchPatientTab('personal', document.getElementById('ptab-personal'));
+
+  // Update modal title & button
+  const titleEl = document.getElementById('m-patient-title');
+  const btnEl   = document.getElementById('m-patient-btn');
+  if (titleEl) titleEl.textContent = 'Edit Patient Record';
+  if (btnEl)   btnEl.textContent   = 'Save Changes';
+
+  // Helper: safely set value only if element exists (prevents TypeError on null)
+  const set = (elId, val) => {
+    const el = document.getElementById(elId);
+    if (el) el.value = (val !== null && val !== undefined) ? val : '';
+  };
+
+  // Personal tab
+  set('p-mrn',   p.mrn || ('PAT-' + String(p.id).padStart(3, '0')));
+  set('p-fn',    p.first_name);
+  set('p-ln',    p.last_name);
+  set('p-dob',   p.birthdate);
+  set('p-ph',    p.phone);
+  set('p-addr',  p.address);
+  set('p-status', p.status || 'active');
+
+  // Gender select
+  const gEl = document.getElementById('p-g');
+  if (gEl) gEl.value = p.gender || 'male';
+
+  // Vitals tab
+  set('p-wt',   p.weight_kg);
+  set('p-ht',   p.height_cm);
+  set('p-bp',   p.blood_pressure);
+  set('p-temp', p.temperature_c);
+  set('p-hr',   p.heart_rate_bpm);
+  set('p-spo2', p.spo2_pct);
+
+  // Clinical tab
+  set('p-cc',      p.chief_complaint);
+  set('p-sym',     p.symptoms);
+  set('p-diag',    p.diagnosis);
+  set('p-inv',     p.investigations);
+  set('p-img',     p.imaging);
+  set('p-ref',     p.referral);
+  set('p-allergy', p.allergies);
+  set('p-hx',      p.medical_history);
+
+  // Emergency contact tab
+  set('p-ec-name',  p.emergency_contact_name);
+  set('p-ec-phone', p.emergency_contact_phone);
 }
 
 function savePatient(){
@@ -2395,15 +2719,25 @@ function renderAppointments(f=''){
     return ok&&(apptStatusF==='all'||a.status===apptStatusF);
   });
   document.getElementById('tb-appts').innerHTML=rows.length
-    ?rows.map(a=>`<tr>
-      <td><span style="color:var(--tx3);font-weight:600">#${a.id}</span></td>
-      <td><strong style="color:var(--tx)">${gPat(a.patient_id)}</strong></td>
-      <td>${gDoc(a.doctor_id)}</td>
-      <td style="color:var(--a2);white-space:nowrap">${fDT(a.appointment_date)}</td>
-      <td>${sBadge(a.status)}</td>
-      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx3)">${a.notes||'—'}</td>
-      <td>${actBtns(`editAppt(${a.id})`,`delAppt(${a.id})`)}</td>
-    </tr>`).join('')
+    ?rows.map(a=>{
+      const p = DB.patients.find(x => x.id === a.patient_id);
+      const phone = p ? (p.phone || '—') : '—';
+      return `<tr>
+        <td><span style="color:var(--tx3);font-weight:600">#${a.id}</span></td>
+        <td><strong style="color:var(--tx)">${gPat(a.patient_id)}</strong><br><span style="font-size:11px;color:var(--tx3)">${phone}</span></td>
+        <td>${gDoc(a.doctor_id)}</td>
+        <td style="color:var(--a2);white-space:nowrap">${fDT(a.appointment_date)}</td>
+        <td>${sBadge(a.status)}</td>
+        <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx3)">${a.notes||'—'}</td>
+        <td>
+          <div style="display:flex;gap:4px;align-items:center">
+            <button class="btn btn-teal btn-sm" onclick="triggerApptSms(${a.id})" title="Send SMS Notification" style="padding:4px 8px;font-size:11px">📱 SMS</button>
+            <button class="btn btn-ghost btn-sm btn-ico" onclick="editAppt(${a.id})" title="Edit">✏️</button>
+            <button class="btn btn-danger btn-sm btn-ico" onclick="delAppt(${a.id})" title="Delete">🗑</button>
+          </div>
+        </td>
+      </tr>`;
+    }).join('')
     :`<tr><td colspan="7"><div class="empty"><div class="eico">📅</div><p>No appointments found</p></div></td></tr>`;
   document.getElementById('nb-appts').textContent=DB.appointments.length;
 }
@@ -2807,20 +3141,7 @@ function filterRooms(s,el){
 }
 
 // ════ EDIT OPENERS ════
-function editPatient(id){
-  const p=DB.patients.find(x=>x.id===id);if(!p)return;
-  editState.patient=id;
-  document.getElementById('p-fn').value=p.first_name;
-  document.getElementById('p-ln').value=p.last_name;
-  document.getElementById('p-g').value=p.gender||'male';
-  document.getElementById('p-dob').value=p.birthdate||'';
-  document.getElementById('p-ph').value=p.phone||'';
-  document.getElementById('p-em').value=p.email||'';
-  document.getElementById('p-addr').value=p.address||'';
-  document.getElementById('m-patient-title').textContent='Edit Patient';
-  document.getElementById('m-patient-btn').textContent='Save Changes';
-  openModal('m-patient');
-}
+// editPatient(id) is fully defined above (line ~2550). This legacy override is intentionally removed.
 function editDoctor(id){
   const d=DB.doctors.find(x=>x.id===id);if(!d)return;
   editState.doctor=id;
@@ -3086,11 +3407,44 @@ function updateInvoice(){
   showToast(`Invoice #${id} updated`,'success');
 }
 // Reset modal state when opened in Add mode
-function openAddPatient(){editState.patient=null;document.getElementById('m-patient-title').textContent='Add New Patient';document.getElementById('m-patient-btn').textContent='Add Patient';['p-fn','p-ln','p-dob','p-ph','p-em','p-addr'].forEach(id=>document.getElementById(id).value='');document.getElementById('p-g').value='male';openModal('m-patient');}
+// openAddPatient is fully defined above (line ~2493). This legacy stub is intentionally removed.
+// The canonical openAddPatient() handles MRN generation, full field clearing, tab switching and openModal.
 function openAddDoctor(){editState.doctor=null;refreshDoctorDeptSelect();document.getElementById('m-doctor-title').textContent='Add New Doctor';document.getElementById('m-doctor-btn').textContent='Add Doctor';['d-fn','d-ln','d-em','d-ph','d-sp'].forEach(id=>document.getElementById(id).value='');openModal('m-doctor');}
-function openAddAppt(){editState.appt=null;document.getElementById('m-appt-title').textContent='Schedule Appointment';document.getElementById('m-appt-btn').textContent='Schedule';document.getElementById('a-st').value='scheduled';['a-dt','a-nt'].forEach(id=>document.getElementById(id).value='');openModal('m-appt');}
-function openAddTreatment(){editState.treatment=null;document.getElementById('m-treatment-title').textContent='Add Treatment Record';document.getElementById('m-treatment-btn').textContent='Add Record';['t-dg','t-dt'].forEach(id=>document.getElementById(id).value='');openModal('m-treatment');}
-function openAddAdmission(){editState.admission=null;populateSelects();document.getElementById('m-admission-title').textContent='Admit Patient';document.getElementById('m-admission-btn').textContent='Admit Patient';document.getElementById('adm-dc-group').style.display='none';['adm-dt','adm-dc','adm-nt'].forEach(id=>document.getElementById(id).value='');openModal('m-admission');}
+function openAddAppt(){
+  editState.appt=null;
+  document.getElementById('m-appt-title').textContent='Schedule Appointment';
+  document.getElementById('m-appt-btn').textContent='Schedule';
+  document.getElementById('a-st').value='scheduled';
+  // Pre-fill date to current datetime-local so user doesn't have to type it
+  const dtEl = document.getElementById('a-dt');
+  if (dtEl) dtEl.value = nowDateTimeLocal();
+  const ntEl = document.getElementById('a-nt');
+  if (ntEl) ntEl.value = '';
+  openModal('m-appt');
+}
+function openAddTreatment(){
+  editState.treatment=null;
+  document.getElementById('m-treatment-title').textContent='Add Treatment Record';
+  document.getElementById('m-treatment-btn').textContent='Add Record';
+  // Default treatment date to today
+  const dtEl = document.getElementById('t-dt');
+  if (dtEl) dtEl.value = todayISO();
+  const dgEl = document.getElementById('t-dg');
+  if (dgEl) dgEl.value = '';
+  openModal('m-treatment');
+}
+function openAddAdmission(){
+  editState.admission=null;
+  populateSelects();
+  document.getElementById('m-admission-title').textContent='Admit Patient';
+  document.getElementById('m-admission-btn').textContent='Admit Patient';
+  document.getElementById('adm-dc-group').style.display='none';
+  // Pre-fill admission date/time to right now
+  const admDtEl = document.getElementById('adm-dt');
+  if (admDtEl) admDtEl.value = nowDateTimeLocal();
+  ['adm-dc','adm-nt'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  openModal('m-admission');
+}
 function openAddUser(){editState.user=null;document.getElementById('m-user-title').textContent='Add New User';document.getElementById('m-user-btn').textContent='Create User';document.getElementById('u-pw-hint').style.display='none';['u-un','u-em','u-pw'].forEach(id=>document.getElementById(id).value='');openModal('m-user');}
 function openAddDept(){editState.dept=null;document.getElementById('m-dept-title').textContent='Add Department';document.getElementById('m-dept-btn').textContent='Add Department';['dp-nm','dp-ds'].forEach(id=>document.getElementById(id).value='');openModal('m-dept');}
 function openAddMed(){editState.med=null;document.getElementById('m-med-title').textContent='Add Medication';document.getElementById('m-med-btn').textContent='Add Medication';['md-nm','md-ds'].forEach(id=>document.getElementById(id).value='');openModal('m-med');}
@@ -3865,9 +4219,13 @@ function renderAiAppointmentCard(appt, patient, doctor) {
   const patientName = `${patient.first_name} ${patient.last_name}`;
   const doctorName = `Dr. ${doctor.first_name} ${doctor.last_name}`;
   const dateStr = appt.appointment_date ? new Date(appt.appointment_date).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : appt.appointment_date;
+  const rawPhone = patient.phone || '+251-911-123456';
   const draftText = `📅 Nucleus Hospital Appointment Reminder:\nDear ${patientName}, your appointment with ${doctorName} is scheduled for ${dateStr}. Ref #${appt.id}. Call +251-11-661-0000 to adjust.`;
 
-  const cardHtml = `
+  // Encode the draft message and phone safely into data attributes to avoid inline-quote issues
+  const cardDiv = document.createElement('div');
+  cardDiv.className = 'ai-msg bot';
+  cardDiv.innerHTML = `
     <div class="ai-notif-card" id="ai-card-${appt.id}">
       <div class="ai-card-hdr">
         <span>🤖 AI Reminder Draft</span>
@@ -3875,28 +4233,190 @@ function renderAiAppointmentCard(appt, patient, doctor) {
       </div>
       <div class="ai-card-patient">👤 ${patientName}</div>
       <div class="ai-card-detail">👨‍⚕️ ${doctorName} · 📅 ${dateStr}</div>
-      <div class="ai-card-detail">📞 Phone: <strong>${patient.phone || '+251-911-123456'}</strong></div>
-      <div class="ai-card-draft">${draftText}</div>
+      <div class="ai-card-detail">📞 Phone: <strong>${rawPhone}</strong></div>
+      <div class="ai-card-draft" id="ai-draft-text-${appt.id}"></div>
       <div class="ai-card-actions" id="ai-actions-${appt.id}">
-        <button class="ai-btn-sms" onclick="sendAiNotification(${appt.id}, 'SMS', '${patientName}', '${patient.phone || '+251-911-123456'}')">📱 Send SMS</button>
-        <button class="ai-btn-wa" onclick="sendAiNotification(${appt.id}, 'WhatsApp', '${patientName}', '${patient.phone || '+251-911-123456'}')">💬 Send WhatsApp</button>
+        <button class="ai-btn-sms"   id="ai-sms-btn-${appt.id}">📱 Send SMS</button>
+        <button class="ai-btn-wa"    id="ai-wa-btn-${appt.id}">💬 Send WhatsApp</button>
       </div>
     </div>
   `;
 
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'ai-msg bot';
-  msgDiv.innerHTML = cardHtml;
-  container.appendChild(msgDiv);
+  // Safely inject the draft text as textContent (no XSS risk)
+  const draftEl = cardDiv.querySelector(`#ai-draft-text-${appt.id}`);
+  if (draftEl) draftEl.textContent = draftText;
+
+  // Wire SMS button
+  const smsBtn = cardDiv.querySelector(`#ai-sms-btn-${appt.id}`);
+  if (smsBtn) smsBtn.addEventListener('click', () => sendAiNotification(appt.id, 'SMS', patientName, rawPhone));
+
+  // Wire WhatsApp button — passes raw values via closure (no string interpolation in HTML)
+  const waBtn = cardDiv.querySelector(`#ai-wa-btn-${appt.id}`);
+  if (waBtn) waBtn.addEventListener('click', () => sendWhatsApp(appt.id, patientName, rawPhone, draftText));
+
+  container.appendChild(cardDiv);
   container.scrollTop = container.scrollHeight;
 }
 
-function sendAiNotification(apptId, channel, patientName, phone) {
+/**
+ * Normalizes any phone number string to digits-only format WITHOUT '+' prefix.
+ * Strips leading '+' and non-digit characters so it becomes 251916403938.
+ */
+function formatPhoneNumberE164(phone) {
+  if (!phone) return '';
+  let digits = String(phone).replace(/\D/g, '');
+
+  if (digits.startsWith('0') && digits.length === 10) {
+    digits = '251' + digits.slice(1);
+  } else if (digits.startsWith('9') && digits.length === 9) {
+    digits = '251' + digits;
+  }
+
+  return digits;
+}
+
+/**
+ * Routes SMS dispatch through backend proxy server (api/send-sms.php) to avoid browser CORS restrictions.
+ * Normalizes phone numbers to digits-only format without leading '+' (e.g. 251916403938).
+ */
+async function sendSMSNotification(phoneNumber, message) {
+  const cleanPhone = formatPhoneNumberE164(phoneNumber);
+
+  if (!cleanPhone || cleanPhone.length < 10) {
+    throw new Error(`Invalid phone number: '${phoneNumber}' (must be in 2519... format)`);
+  }
+
+  console.log(`[SMS Backend Proxy Request] Phone: ${cleanPhone}`);
+
+  let response;
+  try {
+    response = await fetch('api/send-sms.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone: cleanPhone, message: message })
+    });
+  } catch (netErr) {
+    console.error('[SMS Backend Proxy Network Error]', netErr);
+    throw new Error(`Network error reaching SMS backend proxy: ${netErr.message}`);
+  }
+
+  let data;
+  try {
+    data = await response.json();
+  } catch (parseErr) {
+    console.error('[SMS Proxy Response Not JSON] HTTP status:', response.status, parseErr);
+    throw new Error(`Backend SMS proxy returned non-JSON response (HTTP ${response.status})`);
+  }
+
+  console.log('[AfroMessage Backend Proxy Response Payload]', {
+    httpStatus: response.status,
+    ok: response.ok,
+    responseBody: data
+  });
+
+  const isSuccess = response.ok && data && data.success === true;
+
+  if (isSuccess) {
+    return {
+      success: true,
+      phone: cleanPhone,
+      messageSid: data.messageSid || ('AFRO-' + Date.now()),
+      gateway: data.gateway || 'AfroMessage (Backend Proxy)',
+      rawPayload: data
+    };
+  }
+
+  const apiErr = data?.error || data?.message || `HTTP ${response.status} failed`;
+  console.error('[SMS Backend Proxy Dispatch Failed]', apiErr, data);
+  throw new Error(apiErr);
+}
+
+async function sendAiNotification(apptId, channel, patientName, rawPhone) {
   const actionsDiv = document.getElementById(`ai-actions-${apptId}`);
   if (actionsDiv) {
-    actionsDiv.innerHTML = `<div class="ai-card-sent">✅ ${channel} Notification Sent to ${patientName} (${phone})</div>`;
+    actionsDiv.innerHTML = `<div class="ai-card-sent" style="color:var(--a3);font-weight:700;">⏳ Sending ${channel}...</div>`;
   }
-  showToast(`✅ ${channel} reminder sent successfully to ${patientName} (${phone})`, 'success');
+  showToast(`⏳ Sending ${channel} to ${patientName}...`, 'info');
+
+  const draftEl = document.getElementById(`ai-draft-text-${apptId}`);
+  const msgText = draftEl ? draftEl.textContent : `Dear ${patientName}, your appointment is confirmed at Nucleus HMS.`;
+
+  try {
+    const res = await sendSMSNotification(rawPhone, msgText);
+    if (actionsDiv) {
+      actionsDiv.innerHTML = `<div class="ai-card-sent" style="padding:8px 12px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:8px;color:#10b981;font-weight:700;">✅ SMS Successfully Sent to ${res.phone} via ${res.gateway || 'AfroMessage'} (Ref #${res.messageSid})</div>`;
+    }
+    showToast(`✅ SMS Sent to ${res.phone}`, 'success');
+  } catch (err) {
+    const errMsg = err.message || 'Unknown gateway error';
+    if (actionsDiv) {
+      actionsDiv.innerHTML = `<div class="ai-card-sent" style="padding:8px 12px;background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.3);border-radius:8px;color:var(--a4);font-weight:700;">❌ SMS Failed: ${errMsg}</div>`;
+    }
+    showToast(`❌ SMS Failed: ${errMsg}`, 'error');
+  }
+}
+
+async function triggerApptSms(apptId) {
+  const appt = DB.appointments.find(a => a.id === apptId);
+  if (!appt) return;
+  const p = DB.patients.find(x => x.id === appt.patient_id);
+  const d = DB.doctors.find(x => x.id === appt.doctor_id);
+  if (!p) {
+    showToast('Patient record not found', 'error');
+    return;
+  }
+  const pName = `${p.first_name} ${p.last_name}`;
+  const dName = d ? `Dr. ${d.first_name} ${d.last_name}` : 'Staff';
+  const dateStr = fDT(appt.appointment_date);
+  const msgText = `Dear ${pName}, appointment reminder with ${dName} scheduled for ${dateStr}. Ref #${appt.id}.`;
+
+  showToast(`⏳ Sending SMS to ${pName}...`, 'info');
+  try {
+    const res = await sendSMSNotification(p.phone || '251916403938', msgText);
+    showToast(`✅ SMS Sent to ${res.phone} (${res.gateway || 'AfroMessage'}) Ref #${res.messageSid}`, 'success');
+  } catch (err) {
+    showToast(`❌ SMS Failed: ${err.message}`, 'error');
+  }
+}
+
+/**
+ * Formats the raw phone number to E.164 international format and
+ * opens the WhatsApp Click-to-Chat API URL in a new browser tab.
+ *
+ * Normalisation logic:
+ *   1. Strip all spaces, dashes, parentheses and dots.
+ *   2. If the number starts with '0' (local Ethiopian format), replace with '+251'.
+ *   3. If it starts with '251' (without +), prepend '+'.
+ *   4. Otherwise, keep as-is (assumed already international).
+ */
+function sendWhatsApp(apptId, patientName, rawPhone, messageText) {
+  // ── Normalise phone to E.164 digits for WhatsApp Click-to-Chat API ──
+  let phone = (rawPhone || '').replace(/[\s\-().]/g, '');
+  if (phone.startsWith('0')) {
+    phone = '251' + phone.slice(1);
+  } else if (phone.startsWith('+')) {
+    phone = phone.slice(1);
+  } else if (!phone.startsWith('251')) {
+    phone = '251' + phone;
+  }
+
+  // Build exact WhatsApp URL
+  const waUrl = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(messageText);
+
+  // Open in a new browser tab
+  window.open(waUrl, '_blank');
+
+  // Update draft card UI to confirmed state (if present)
+  const actionsDiv = document.getElementById(`ai-actions-${apptId}`);
+  if (actionsDiv) {
+    actionsDiv.innerHTML = `<div class="ai-card-sent">✅ WhatsApp opened for ${patientName} (+${phone})</div>`;
+  }
+  // Update green confirmation card UI to confirmed state (if present)
+  const confirmActionsDiv = document.getElementById(`ai-confirm-actions-${apptId}`);
+  if (confirmActionsDiv) {
+    confirmActionsDiv.innerHTML = `<div class="ai-card-sent" style="padding:10px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);border-radius:8px;color:#10b981;font-weight:700;text-align:center;">✅ WhatsApp Reminder Opened for ${patientName} (+${phone})</div>`;
+  }
+  showToast(`💬 Opening WhatsApp for ${patientName} (+${phone})...`, 'success');
 }
 
 function addAiMessage(sender, text) {
@@ -3917,12 +4437,354 @@ function addAiMessage(sender, text) {
   if (sender === 'bot') speakText(text);
 }
 
+// ════ CLINICAL ASSESSMENT SUMMARY CARD (AI Chat) ════
+function renderAiClinicalSummaryCard(p) {
+  const container = document.getElementById('ai-chat-messages');
+  if (!container) return;
+
+  // Build AI clinical note (rule-based decision support)
+  function buildClinicalNote(p) {
+    const diag = (p.diagnosis || '').toLowerCase();
+    const bp   = p.blood_pressure || '';
+    const spo2 = p.spo2_pct || 100;
+    const hr   = p.heart_rate_bpm || 0;
+    const temp = p.temperature_c || 37;
+
+    const bpHigh   = bp && (parseInt(bp) >= 140 || parseInt(bp.split('/')[1]) >= 90);
+    const spo2Low  = spo2 < 95;
+    const hrHigh   = hr > 100;
+    const fever    = temp >= 38;
+
+    if (diag.includes('hypertension') || bpHigh)
+      return `<strong>Clinical Note:</strong> Elevated BP (${bp}) with hypertensive diagnosis — consider antihypertensive titration and cardiology follow-up given reported ${spo2Low ? 'low SpO₂ and ' : ''}symptoms.`;
+    if (diag.includes('angina') || diag.includes('chest'))
+      return `<strong>Clinical Note:</strong> Chest pain presentation with ${bp ? 'BP '+bp+' and ' : ''}HR ${hr} bpm — urgent cardiac workup (ECG, troponin) and cardiology referral is recommended.`;
+    if (diag.includes('migraine') || diag.includes('headache'))
+      return `<strong>Clinical Note:</strong> Recurrent migraine with aura — evaluate triggering factors, consider prophylactic therapy and neurology co-management.`;
+    if (diag.includes('meniscal') || diag.includes('knee') || diag.includes('ortho'))
+      return `<strong>Clinical Note:</strong> Confirmed meniscal tear with limited ROM — physiotherapy initiated; surgical assessment should be expedited if conservative management fails.`;
+    if (diag.includes('anxiety') || diag.includes('panic'))
+      return `<strong>Clinical Note:</strong> Atypical chest pain with cardiac causes largely excluded — psychiatric evaluation for anxiety/panic disorder is clinically indicated.`;
+    if (spo2Low)
+      return `<strong>Clinical Note:</strong> SpO₂ at ${spo2}% — supplemental oxygen assessment warranted; consider pulmonary evaluation urgently.`;
+    if (fever)
+      return `<strong>Clinical Note:</strong> Temperature ${temp}°C — febrile; monitor for infection, CBC and culture results should guide antibiotic therapy.`;
+    return `<strong>Clinical Note:</strong> Patient stable with diagnosis of ${p.diagnosis || 'under evaluation'} — continue current management plan and reassess at next follow-up.`;
+  }
+
+  const imgStatus = p.imaging && p.imaging !== 'None indicated' ? '✅ Available' : '⏳ None ordered';
+  const labStatus = p.investigations ? '✅ Available' : '⏳ None ordered';
+  const clinicalNote = buildClinicalNote(p);
+
+  const cardHtml = `
+    <div class="ai-cds-card">
+      <div class="ai-cds-header">
+        <div class="ai-cds-header-title">🏥 Clinical Assessment Summary</div>
+        <span class="ai-cds-header-badge">AI Decision Support</span>
+      </div>
+      <div class="ai-cds-body">
+
+        <!-- Vitals Overview -->
+        <div>
+          <div class="ai-cds-section-label">📊 Vitals Overview</div>
+          <div class="ai-cds-vitals-grid">
+            <div class="ai-cds-vital-item">
+              <div class="ai-cds-vital-val" style="color:var(--a4)">${p.blood_pressure || '—'}</div>
+              <div class="ai-cds-vital-lbl">Blood Pressure</div>
+            </div>
+            <div class="ai-cds-vital-item">
+              <div class="ai-cds-vital-val" style="color:#10b981">${p.spo2_pct ? p.spo2_pct + '%' : '—'}</div>
+              <div class="ai-cds-vital-lbl">SpO₂</div>
+            </div>
+            <div class="ai-cds-vital-item">
+              <div class="ai-cds-vital-val" style="color:var(--a2)">${p.heart_rate_bpm ? p.heart_rate_bpm + ' bpm' : '—'}</div>
+              <div class="ai-cds-vital-lbl">Heart Rate</div>
+            </div>
+            <div class="ai-cds-vital-item">
+              <div class="ai-cds-vital-val" style="color:var(--a3)">${p.temperature_c ? p.temperature_c + ' °C' : '—'}</div>
+              <div class="ai-cds-vital-lbl">Temperature</div>
+            </div>
+            <div class="ai-cds-vital-item">
+              <div class="ai-cds-vital-val" style="color:var(--tx)">${p.weight_kg ? p.weight_kg + ' kg' : '—'}</div>
+              <div class="ai-cds-vital-lbl">Weight</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clinical Profile -->
+        <div>
+          <div class="ai-cds-section-label">🩺 Clinical Profile</div>
+          <div class="ai-cds-profile-grid">
+            <div class="ai-cds-profile-item primary" style="grid-column:1/-1">
+              <div class="ai-cds-profile-label">Chief Complaint</div>
+              <div class="ai-cds-profile-value">${p.chief_complaint || 'Not recorded'}</div>
+            </div>
+            <div class="ai-cds-profile-item">
+              <div class="ai-cds-profile-label">Symptoms</div>
+              <div class="ai-cds-profile-value">${p.symptoms || '—'}</div>
+            </div>
+            <div class="ai-cds-profile-item danger">
+              <div class="ai-cds-profile-label">Diagnosis</div>
+              <div class="ai-cds-profile-value" style="color:var(--a)">${p.diagnosis || 'Pending evaluation'}</div>
+            </div>
+            <div class="ai-cds-profile-item amber">
+              <div class="ai-cds-profile-label">🧪 Lab Investigations</div>
+              <div class="ai-cds-profile-value">${labStatus}</div>
+            </div>
+            <div class="ai-cds-profile-item" style="border-left-color:var(--a5)">
+              <div class="ai-cds-profile-label">🖼 Imaging</div>
+              <div class="ai-cds-profile-value">${imgStatus}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Clinical Note -->
+        <div class="ai-cds-note">
+          <div class="ai-cds-note-icon">🤖</div>
+          <div class="ai-cds-note-text">${clinicalNote}</div>
+        </div>
+
+      </div>
+    </div>
+  `;
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'ai-msg bot';
+  msgDiv.innerHTML = cardHtml;
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ════ APPOINTMENT SCHEDULING CONFIRMATION CARD (AI Chat) ════
+function renderAiScheduledConfirmationCard(appt, patient, doctor, apptDateTimeStr) {
+  const container = document.getElementById('ai-chat-messages');
+  if (!container) return;
+
+  const patientName = `${patient.first_name} ${patient.last_name}`;
+  const doctorName = `Dr. ${doctor.first_name} ${doctor.last_name}`;
+  const dateFormattedStr = new Date(apptDateTimeStr).toLocaleString('en-GB', {
+    dateStyle: 'full',
+    timeStyle: 'short'
+  });
+
+  const cardHtml = `
+    <div class="ai-cds-card" style="border-color:rgba(16,185,129,.4);background:linear-gradient(135deg,rgba(16,185,129,.08) 0%,rgba(0,210,170,.08) 100%);">
+      <div class="ai-cds-header" style="background:linear-gradient(90deg,rgba(16,185,129,.2),rgba(0,210,170,.12));border-bottom-color:rgba(16,185,129,.25);">
+        <div class="ai-cds-header-title" style="color:#10b981;">
+          ✅ Appointment Successfully Scheduled
+        </div>
+        <span class="ai-cds-header-badge" style="background:rgba(16,185,129,.2);color:#10b981;border-color:rgba(16,185,129,.4);">Ref #${appt.id}</span>
+      </div>
+      <div class="ai-cds-body">
+        <div class="ai-cds-profile-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="ai-cds-profile-item primary">
+            <div class="ai-cds-profile-label">👤 Patient</div>
+            <div class="ai-cds-profile-value" style="font-weight:700;">${patientName}</div>
+            <div style="font-size:11px;color:var(--tx3);">${patient.mrn || ''} · ${patient.phone || ''}</div>
+          </div>
+          <div class="ai-cds-profile-item" style="border-left-color:var(--a2);">
+            <div class="ai-cds-profile-label">👨‍⚕️ Doctor</div>
+            <div class="ai-cds-profile-value" style="font-weight:700;">${doctorName}</div>
+            <div style="font-size:11px;color:var(--tx3);">${gDept(doctor.department_id)}</div>
+          </div>
+          <div class="ai-cds-profile-item amber" style="grid-column:1/-1;">
+            <div class="ai-cds-profile-label">📅 Date & Time</div>
+            <div class="ai-cds-profile-value" style="font-weight:700;color:var(--a3);">${dateFormattedStr}</div>
+          </div>
+        </div>
+        <div class="ai-cds-note" style="background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.25);">
+          <div class="ai-cds-note-icon">📱</div>
+          <div class="ai-cds-note-text" style="color:var(--tx);font-style:normal;">
+            Appointment saved to system database. Click below to dispatch the WhatsApp reminder.
+          </div>
+        </div>
+        <div style="margin-top:12px;" id="ai-confirm-actions-${appt.id}">
+          <button class="ai-btn-wa" id="ai-confirm-wa-btn-${appt.id}" style="width:100%;padding:10px 16px;font-size:13px;font-weight:700;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:#fff;border:none;box-shadow:0 4px 12px rgba(37,211,102,0.3);transition:transform 0.2s ease;">
+            📲 Send Reminder via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const msgDiv = document.createElement('div');
+  msgDiv.className = 'ai-msg bot';
+  msgDiv.innerHTML = cardHtml;
+  container.appendChild(msgDiv);
+
+  // Wire WhatsApp button directly inside green confirmation card
+  const confirmWaBtn = msgDiv.querySelector(`#ai-confirm-wa-btn-${appt.id}`);
+  if (confirmWaBtn) {
+    const rawPhone = patient.phone || '+251916403938';
+    const msgText = `Dear ${patientName}, your appointment with ${doctorName} is scheduled for ${dateFormattedStr}.`;
+    confirmWaBtn.addEventListener('click', () => sendWhatsApp(appt.id, patientName, rawPhone, msgText));
+  }
+
+  // Render notification draft card so SMS / WhatsApp reminder can also be accessed separately
+  renderAiAppointmentCard(appt, patient, doctor);
+
+  container.scrollTop = container.scrollHeight;
+}
+
+// ════ AI APPOINTMENT SCHEDULING PARSER & INTENT HANDLER ════
+function handleAiAppointmentScheduling(text) {
+  const normText = text.toLowerCase();
+
+  // 1. Extract potential patient name
+  let extractedPatientName = '';
+  const forMatch = text.match(/for\s+(?:patient\s+)?([A-Za-z]+(?:\s+[A-Za-z]+)?)/i);
+  if (forMatch && forMatch[1]) {
+    const raw = forMatch[1].trim();
+    if (!['tomorrow', 'today', 'dr', 'doctor', 'an', 'a'].includes(raw.toLowerCase())) {
+      extractedPatientName = raw;
+    }
+  }
+
+  // 2. Find patient in DB.patients
+  let matchedPatient = DB.patients.find(p => {
+    const fn = p.first_name.toLowerCase();
+    const ln = p.last_name.toLowerCase();
+    const fullName = `${fn} ${ln}`;
+    if (extractedPatientName) {
+      const extLower = extractedPatientName.toLowerCase();
+      if (fullName.includes(extLower) || extLower.includes(fn) || extLower.includes(ln)) return true;
+    }
+    return normText.includes(fullName) || normText.includes(fn) || normText.includes(ln);
+  });
+
+  // If patient does NOT exist in database
+  if (!matchedPatient) {
+    const nameDisplay = extractedPatientName || (forMatch ? forMatch[1] : 'the requested patient');
+    addAiMessage('bot', `⚠️ Patient **${nameDisplay}** does not exist in the database. Please add the patient to the system first before scheduling an appointment.`);
+    showToast(`Patient "${nameDisplay}" not found. Please add patient first.`, 'error');
+    return true;
+  }
+
+  // 3. Find doctor in DB.doctors
+  let matchedDoctor = DB.doctors.find(d => {
+    const fn = d.first_name.toLowerCase();
+    const ln = d.last_name.toLowerCase();
+    const fullName = `${fn} ${ln}`;
+    return normText.includes(fullName) || normText.includes(fn) || normText.includes(ln);
+  });
+
+  if (!matchedDoctor) {
+    const withMatch = text.match(/with\s+(?:dr\.?\s*)?([A-Za-z]+(?:\s+[A-Za-z]+)?)/i);
+    if (withMatch && withMatch[1]) {
+      const docCandidate = withMatch[1].trim().toLowerCase();
+      matchedDoctor = DB.doctors.find(d => {
+        const fn = d.first_name.toLowerCase();
+        const ln = d.last_name.toLowerCase();
+        return fn.includes(docCandidate) || ln.includes(docCandidate);
+      });
+    }
+  }
+
+  // Fallback to first doctor if unspecified
+  if (!matchedDoctor) {
+    matchedDoctor = DB.doctors[0];
+  }
+
+  // 4. Parse Date — always anchored to the REAL current date via new Date()
+  let targetDate = new Date(); // live system date
+
+  if (normText.includes('day after tomorrow')) {
+    targetDate.setDate(targetDate.getDate() + 2);
+  } else if (normText.includes('tomorrow')) {
+    targetDate.setDate(targetDate.getDate() + 1);
+  } else if (normText.includes('today') || normText.includes('right now')) {
+    // keep as today — no change needed
+  } else if (normText.includes('next week')) {
+    targetDate.setDate(targetDate.getDate() + 7);
+  } else if (normText.includes('this week')) {
+    // keep within current week — default to Monday of current week
+    const dow = targetDate.getDay(); // 0=Sun, 1=Mon ...
+    const toMon = dow === 0 ? 1 : (1 - dow); // days to Monday
+    targetDate.setDate(targetDate.getDate() + toMon);
+  } else {
+    // Named weekday: "next Monday", "this Friday", "on Wednesday"
+    const weekdays = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+    const wdMatch = normText.match(/(?:next|this|on)?\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)/i);
+    if (wdMatch) {
+      const targetDow = weekdays.indexOf(wdMatch[1].toLowerCase());
+      const currentDow = targetDate.getDay();
+      let diff = targetDow - currentDow;
+      // If same day or in past and 'next' is implied, roll to next week
+      if (diff <= 0 || normText.includes('next')) diff += 7;
+      targetDate.setDate(targetDate.getDate() + diff);
+    } else {
+      // Explicit date string: YYYY-MM-DD or DD/MM/YYYY
+      const dMatch = text.match(/(\d{4}-\d{2}-\d{2})|(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/);
+      if (dMatch) {
+        const pDate = new Date(dMatch[0]);
+        if (!isNaN(pDate.getTime())) targetDate = pDate;
+      }
+      // else: no date mentioned → default to today (targetDate stays as new Date())
+    }
+  }
+  const year = targetDate.getFullYear();
+  const month = String(targetDate.getMonth() + 1).padStart(2, '0');
+  const day = String(targetDate.getDate()).padStart(2, '0');
+  const dateStr = `${year}-${month}-${day}`;
+
+
+  // 5. Parse Time
+  let timeStr = '10:00';
+  const atTimeMatches = text.match(/(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/gi);
+  if (atTimeMatches) {
+    for (const tm of atTimeMatches) {
+      const m = tm.match(/(?:at\s+)?(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+      if (m && (tm.toLowerCase().includes('at') || m[2] || m[3])) {
+        let hrs = parseInt(m[1]);
+        const mins = m[2] ? m[2] : '00';
+        const ampm = m[3] ? m[3].toLowerCase() : null;
+        if (ampm === 'pm' && hrs < 12) hrs += 12;
+        if (ampm === 'am' && hrs === 12) hrs = 0;
+        timeStr = `${String(hrs).padStart(2, '0')}:${mins}`;
+        break;
+      }
+    }
+  }
+
+  const apptDateTimeStr = `${dateStr}T${timeStr}`;
+
+  // 6. Create & Add New Entry to DB.appointments
+  const newAppt = {
+    id: nxt.a++,
+    patient_id: matchedPatient.id,
+    doctor_id: matchedDoctor.id,
+    appointment_date: apptDateTimeStr,
+    status: 'scheduled',
+    notes: 'Scheduled via Nucleus AI Assistant'
+  };
+
+  DB.appointments.push(newAppt);
+
+  // Refresh UI state across application
+  renderAppointments();
+  renderDashboardStats();
+  if (typeof populateSelects === 'function') populateSelects();
+  const badge = document.getElementById('ai-pending-badge');
+  if (badge) {
+    const upcoming = DB.appointments.filter(a => a.status === 'scheduled').length;
+    badge.textContent = upcoming;
+  }
+
+  showToast(`✅ Appointment #${newAppt.id} scheduled for ${matchedPatient.first_name} ${matchedPatient.last_name}`, 'success');
+
+  // 7. Show Confirmation Card in AI Chat
+  renderAiScheduledConfirmationCard(newAppt, matchedPatient, matchedDoctor, apptDateTimeStr);
+  return true;
+}
+
 function sendQuickPrompt(promptText) {
   addAiMessage('user', promptText);
   
   setTimeout(() => {
     const q = promptText.toLowerCase();
-    if (q.includes('appointment')) {
+    if (q.includes('schedule') || q.includes('book')) {
+      handleAiResponse(promptText);
+    } else if (q.includes('appointment')) {
       scanUpcomingAppointments(true);
     } else if (q.includes('reminder') || q.includes('draft')) {
       scanUpcomingAppointments(true);
@@ -3984,6 +4846,16 @@ function handleAiResponse(text) {
     }
   }
 
+  // ════ 2. APPOINTMENT SCHEDULING INTENT ════
+  const isScheduleIntent = /(schedule|book|create|set\s*up|make)\s*(an?|a)?\s*appointment/i.test(text) ||
+                           (text.toLowerCase().includes('appointment') && (text.toLowerCase().includes('for ') || text.toLowerCase().includes('with ')));
+
+  if (isScheduleIntent) {
+    if (handleAiAppointmentScheduling(text)) {
+      return;
+    }
+  }
+
   // ════ 2. PATIENT SEARCH MATCH ════
   const patientMatch = DB.patients.find(p => {
     const fn = p.first_name.toLowerCase();
@@ -3996,6 +4868,15 @@ function handleAiResponse(text) {
     const appts = DB.appointments.filter(a => a.patient_id === p.id);
     const lastAppt = appts[0];
     const doctor = lastAppt ? DB.doctors.find(d => d.id === lastAppt.doctor_id) : null;
+
+    // ── SUMMARIZE intent → render full Clinical Assessment Summary Card ──
+    const isSummarize = /(summar|vitals|symptoms|clinical|assess|profile|report|overview)/i.test(text);
+    if (isSummarize) {
+      addAiMessage('bot', `🔍 Generating clinical summary for **${p.first_name} ${p.last_name}**...`);
+      renderAiClinicalSummaryCard(p);
+      return;
+    }
+
     showPage('patients');
     addAiMessage('bot', `🔍 Found Patient Record for **${p.first_name} ${p.last_name}**:\n• Gender: **${p.gender}**\n• Phone: **${p.phone||'—'}**\n• Address: **${p.address||'—'}**\n• Total Appointments: **${appts.length}**`);
     if (lastAppt) renderAiAppointmentCard(lastAppt, p, doctor || {first_name:'Staff', last_name:''});
